@@ -16,6 +16,8 @@ class Turret(pg.sprite.Sprite):
         self.image = pg.Surface((50,100))
         self.rect = self.image.get_rect()
 
+        self.active = False
+
 class Base(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
@@ -35,12 +37,15 @@ class CrossbowTurret(Turret):
         self.rect.center = self.base.rect.center
 
     def update(self):
+        if not self.active:
+            return
         self.mx,self.my = pg.mouse.get_pos()
         self.angle = math.degrees(math.atan2(self.mx-self.rect.center[0],self.my-self.rect.center[1])) - 90
 
         self.image = pg.transform.rotate(self.spr,self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
+
 
 
 

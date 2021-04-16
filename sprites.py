@@ -89,13 +89,19 @@ class Map(pg.sprite.Sprite):
         curline+=self.rows+1
         n_turrets = int(lines[curline])
         curline+=1
+
+        first_turret = None
         for line in lines[curline:curline+n_turrets]:
             t,x,y = map(int,line.split())
             tur = TURRETCLASSES[t](t,x,y,self.game)
+            if not first_turret:
+                first_turret = tur
+
             self.game.turrets.add(tur)
             self.game.all_sprites.add(tur.base)
             self.game.all_sprites.add(tur)
-            
+
+        first_turret.active = True
 
 
 
