@@ -1,0 +1,15 @@
+
+1) Bullet mechanism 
+2) Enemy properties
+3) Turret properties
+4) Collissions
+5) Different Turrets and control
+6) The 10 second powerups
+7) Graphics/Art
+9) Enemy Waves and Score
+10) Basic Map
+11) Main and Pause Menus
+12) Tutorial 
+13) Sounds
+14) Polish
+

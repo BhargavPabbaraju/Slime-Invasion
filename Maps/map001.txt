@@ -1,0 +1,18 @@
+#MAP GRID
+g g g g g g g g g g g g g g g g g g g g g g g g g g g g g g
+g g g g g g g g g g g d d d d d d d d d d d d d d d d d d d
+g g g g g g g g g g g d d d d d d d d d d d d d d d d d d d
+g g g g g g g g g g g d d 0 0 0 0 g g g g g g g g g g d d g
+g g g g g g g g g g g d d 0 0 0 0 g g g g g g g g g g d d g
+g g g g g g g g g g g d d 0 0 0 0 g g g g g g g g g g d d g
+g g g g g g g g g g g d d 0 0 0 0 d d d d d d d d d d d d g
+g g g g g g g g g g g d d 0 0 0 0 d d d d d d d d d d d d g
+g g g g g g g g g g g d d 0 0 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g d d 0 0 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g d d 0 0 0 0 d d g g g g g g g g g g g
+d d d d d d d d d d d d d 0 0 0 0 d d g g g g g g g g g g g
+d d d d d d d d d d d d d 0 0 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
