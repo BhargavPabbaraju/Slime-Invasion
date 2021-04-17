@@ -17,16 +17,16 @@ class Arrow(Bullet):
         super().__init__()
 
         #Properties
-        self.speed = 15
+        self.speed = 10
         self.last_time = 0
-        self.angle = angle
+        self.angle = angle 
 
         self.image = pg.image.load('Images/arrow.png')
         self.image = pg.transform.rotate(self.image,self.angle)
         self.image = pg.transform.scale(self.image,(int(self.image.get_width()*1.75),int(self.image.get_height()*1.75)))
         self.rect = self.image.get_rect()
-        self.rect.x = x
-        self.rect.y = y
+    
+        self.rect.center =x,y
         self.last_update = 300
 
         self.v = vec()
