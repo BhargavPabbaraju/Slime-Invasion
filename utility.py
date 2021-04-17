@@ -18,3 +18,11 @@ class Spritesheet(pg.sprite.Sprite):
         surf = pg.transform.scale(surf,(int(w*scale),int(h*scale)))
         return surf
         
+def load_animation(file,sprite_width,sprite_height,colorkey,scale):
+    animation_database  = []
+    for yindex in range(int(pg.image.load(file).get_height()/sprite_height)):
+        animation_database.append([])
+        for xindex in range(int(pg.image.load(file).get_width()/sprite_width)):
+            animation_database[yindex].append(Spritesheet(file).scale(sprite_width*xindex,sprite_height*yindex,sprite_width,sprite_height,colorkey,scale))
+
+    return animation_database
