@@ -49,6 +49,7 @@ class CrossbowTurret(Turret):
         self.animation_frame = 0
 
 
+
     def update(self):
         if not self.active:
             self.image = self.animation_database[self.action][self.animation_frame]
@@ -74,6 +75,7 @@ class CrossbowTurret(Turret):
             #shoot
             self.shot = True
             self.arrow = Arrow(*self.rect.center,self.angle)
+            self.arrow.damage = CROSSBOWDAMAGE
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
 

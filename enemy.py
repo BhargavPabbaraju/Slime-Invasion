@@ -1,6 +1,6 @@
   
 from utility import *
-from enemypaths import * 
+
 
 class Enemy(pg.sprite.Sprite):
     def __init__(self,file,x,y,game,speed,lane):
@@ -18,7 +18,9 @@ class Enemy(pg.sprite.Sprite):
         self.x = x
         self.y = y
 
+        self.pos = vec(self.x,self.y)
         self.imagify()
+        
         
         
         self.last_update = pg.time.get_ticks()
@@ -35,13 +37,13 @@ class Enemy(pg.sprite.Sprite):
         self.vel.from_polar((self.speed,0))
 
         self.vel2 = vec()
-        self.vel.from_polar((self.speed,90))
+        self.vel2.from_polar((self.speed,90))
 
 
     def imagify(self):
         self.image = self.sheet.scale(self.index*32,0*32,32,32,self.color,1)
         self.rect = self.image.get_rect()
-        self.rect.topleft = self.x,self.y
+        self.rect.topleft = self.pos
     
 
 
@@ -55,9 +57,15 @@ class Enemy(pg.sprite.Sprite):
             
             self.index = (self.index+1)%4
             self.imagify()
+
+            self.pos += self.vel
             
             self.last_update = now
         
+        if self.hp<=0:
+            self.kill()
+        
+
        
         
 
@@ -68,6 +76,8 @@ class GreenSlime(Enemy):
     
     def __init__(self,x,y,game,lane):
         super().__init__('Images/slime0.png',x,y,game,5,lane)
+
+        self.hp = GREENSLIMEHEALTH
         
         
 
@@ -77,6 +87,10 @@ class BlueSlime(Enemy):
 
     def __init__(self,x,y,game,lane):
         super().__init__('Images/slime1.png',x,y,game,10,lane)
+
+        self.hp = BLUESLIMEHEALTH
+    
+    
 
 
 

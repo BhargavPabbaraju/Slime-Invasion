@@ -129,8 +129,7 @@ class Game(Baseclass):
     
 
     def check_collisions(self):
-        return
-        hits = pg.pygame.sprite.spritecollide(sprite, group, dokill, collided = None)
+        pg.sprite.groupcollide(self.bullets, self.enemies,True, True)
 
 
 
