@@ -17,7 +17,7 @@ class Spritesheet(pg.sprite.Sprite):
         surf = self.get(x,y,w,h,color)
         surf = pg.transform.scale(surf,(int(w*scale),int(h*scale)))
         return surf
-    
+
     def load_animation(self,sprite_width,sprite_height,colorkey,scale):
         animation_database  = []
         for yindex in range(int(self.file.get_height()/sprite_height)):
@@ -26,3 +26,5 @@ class Spritesheet(pg.sprite.Sprite):
                 animation_database[yindex].append(self.scale(sprite_width*xindex,sprite_height*yindex,sprite_width,sprite_height,colorkey,scale))
 
         return animation_database
+
+
