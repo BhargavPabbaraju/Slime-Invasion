@@ -57,8 +57,7 @@ class Game(Baseclass):
         
         self.map = Map(self)
         
-       
-
+        
         self.screen = disp
     
 
@@ -69,6 +68,18 @@ class Game(Baseclass):
         self.tiles = pg.sprite.Group()
         self.turrets = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
+    
+    def events(self):
+        mx,my = pg.mouse.get_pos()
+        #print(mx,my)
+        for turret in self.turrets:
+            if turret.rect.collidepoint(mx,my):
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    self.current_turret.active = False
+                    self.current_turret = turret
+                    self.current_turret.active = True
+                        
 
 
 class Main(Baseclass):
