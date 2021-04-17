@@ -6,7 +6,7 @@ class Baseclass:
         self.exit = False
         self.screen = pg.Surface((width,height))
         self.init_groups()
-        
+        self.clock = pg.time.Clock()
     
 
     def init_groups(self):
@@ -56,6 +56,9 @@ class Game(Baseclass):
         self.mapid = 1
         
         self.map = Map(self)
+
+        en = Enemy()
+        self.all_sprites.add(en)
         
         
         self.screen = disp

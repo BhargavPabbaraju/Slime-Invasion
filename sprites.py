@@ -1,5 +1,6 @@
 import enemy,bullet
 from turret import *
+from enemy import *
 from utility import *
 from settings import *
 
