@@ -22,6 +22,7 @@ class Baseclass:
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
         pg.display.flip()
+        self.clock.tick(60)
 
     def events(self):
         '''Check for mouse click or key press events'''
@@ -60,7 +61,6 @@ class Game(Baseclass):
         en = Enemy()
         self.all_sprites.add(en)
         
-        
         self.screen = disp
     
 
@@ -71,6 +71,7 @@ class Game(Baseclass):
         self.tiles = pg.sprite.Group()
         self.turrets = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
+        self.bullets = pg.sprite.Group()
     
     def events(self):
         mx,my = pg.mouse.get_pos()
@@ -80,6 +81,8 @@ class Game(Baseclass):
                 clicks = pg.mouse.get_pressed()
                 if clicks[0]:
                     self.current_turret.active = False
+                    self.current_turret.action = 0
+                    self.current_turret.animation_frame = 0
                     self.current_turret = turret
                     self.current_turret.active = True
     
@@ -87,13 +90,17 @@ class Game(Baseclass):
     def keyevents(self,key):
         if key == pg.K_TAB:
             self.current_turret.active = False
+            self.current_turret.action = 0
+            self.current_turret.animation_frame = 0
             self.turret_index = (self.turret_index+1)%len(self.turrets)
             self.current_turret = self.turrets.sprites()[self.turret_index]
             self.current_turret.active = True
 
-    def mouseevents(self,button):
-        if button == 1:
-            self.current_turret.toggle_shoot()
+    def mouseevents(self,button,action):
+        if action == pg.MOUSEBUTTONDOWN and button == 1:
+            self.current_turret.toggle_shoot(True)
+        elif action == pg.MOUSEBUTTONUP and button == 1:
+            self.current_turret.toggle_shoot(False)
 
 
                         
@@ -119,8 +126,8 @@ class Main(Baseclass):
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
 
-                if event.type == pg.MOUSEBUTTONDOWN:
-                    self.game.mouseevents(event.button)
+                if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
+                    self.game.mouseevents(event.button,event.type)
 
 
             if self.game_state == 0:

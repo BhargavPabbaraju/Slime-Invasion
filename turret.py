@@ -1,5 +1,6 @@
 from settings import *
 from utility import *
+from bullet import *
 import math
 
 class Turret(pg.sprite.Sprite):
@@ -11,6 +12,8 @@ class Turret(pg.sprite.Sprite):
         self.c = c -1
         self.x = self.c*32 
         self.y = self.r*32
+        self.game = game
+        self.last_time = pg.time.get_ticks()
 
 
         self.image = pg.Surface((50,100))
@@ -34,10 +37,12 @@ class CrossbowTurret(Turret):
         self.spr = self.image.copy()
         self.rect = self.image.get_rect()
         self.base.rect.topleft = self.x,self.y
+        self.animation_framerate = 22
         self.rect.center = self.base.rect.center
+        self.shot = False
 
         #load animations
-        self.animation_database = load_animation('Images/CrossbowSheet.png',48,32,(0,0,0),1.75)
+        self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1.75)
 
         #animation variables
         self.action = 0
@@ -46,10 +51,12 @@ class CrossbowTurret(Turret):
 
     def update(self):
         if not self.active:
+            self.image = self.animation_database[self.action][self.animation_frame]
+            self.rect = self.image.get_rect()
+            self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
             return
 
-        print(pg.time.get_ticks())
-        self.animation_frame += pg.time.get_ticks()/1000
+        self.animation_frame += deltaTime(self.last_time) * self.animation_framerate
         if int(self.animation_frame) >= len(self.animation_database[self.action]):
             self.animation_frame = 0
 
@@ -59,15 +66,24 @@ class CrossbowTurret(Turret):
         self.rect = self.image.get_rect()
         self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
 
-    def toggle_shoot(self):
-        if self.action == 1:
-            self.action = 0
-        elif self.action == 0:
-            self.action = 1
-        print(self.action)
+        if(self.action == 1 and int(self.animation_frame) == 5):
+            self.shot = False
 
+        #shoot projectile
+        if(self.action == 1 and int(self.animation_frame) == 6 and not self.shot):
+            #shoot
+            self.shot = True
+            self.arrow = Arrow(self.rect.x,self.rect.y,self.angle)
+            self.game.all_sprites.add(self.arrow)
+            self.game.bullets.add(self.arrow)
 
+        self.last_time = pg.time.get_ticks()
 
+    def toggle_shoot(self,val):
+        if self.action == val:
+            return
+        self.action = val
+        self.animation_frame = 0
 
 
 TURRETCLASSES = {

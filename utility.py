@@ -24,7 +24,11 @@ class Spritesheet(pg.sprite.Sprite):
             animation_database.append([])
             for xindex in range(int(self.file.get_width()/sprite_width)):
                 animation_database[yindex].append(self.scale(sprite_width*xindex,sprite_height*yindex,sprite_width,sprite_height,colorkey,scale))
-
         return animation_database
 
+old_time = 0
 
+def deltaTime(last_time):
+    dt = pg.time.get_ticks() - last_time
+    old_time = last_time
+    return dt/1000

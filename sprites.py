@@ -1,4 +1,4 @@
-import enemy,bullet
+from bullet import *
 from turret import *
 from enemy import *
 from utility import *
