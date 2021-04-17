@@ -32,3 +32,23 @@ def deltaTime(last_time):
     dt = pg.time.get_ticks() - last_time
     old_time = last_time
     return dt/1000
+
+
+def findpaths(mapid):
+    file = open('Maps/paths%s.txt'%(str(mapid).zfill(3)))
+    lines = file.readlines()
+
+    paths = [[],[]]
+    n_paths = int(lines[1])
+    curline = 2
+
+    for line in lines[curline:curline+n_paths]:
+        paths[0].append(list(map(int,line.split())))
+    
+    curline+=n_paths+1
+    n_paths = int(lines[1])
+    curline+=1
+
+    for line in lines[curline:curline+n_paths]:
+        paths[1].append(list(map(int,line.split())))
+

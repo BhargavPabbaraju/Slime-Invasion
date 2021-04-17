@@ -1,7 +1,7 @@
 from settings import *
 from utility import *
 from bullet import *
-import math
+
 
 class Turret(pg.sprite.Sprite):
     def __init__(self,type,r,c,game):

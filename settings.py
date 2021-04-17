@@ -3,7 +3,8 @@
 import pygame as pg
 import random as rd
 import sys
-
+import math
+from pygame.math import Vector2 as vec
 
 ###SETTING VARIABLES
 WIDTH = 960
