@@ -1,6 +1,7 @@
 from pygame.math import Vector2 as vec
 from utility import *
 
+
 class Enemy(pg.sprite.Sprite):
     def __init__(self,file,x,y,game,speed,lane):
         
@@ -19,7 +20,9 @@ class Enemy(pg.sprite.Sprite):
         self.waypoint_index = 0
         self.target = waypoints[self.waypoint_index]
 
+        self.pos = vec(self.x,self.y)
         self.imagify()
+        
         
         
         self.last_update = pg.time.get_ticks()
@@ -73,6 +76,8 @@ class Enemy(pg.sprite.Sprite):
         if now - self.last_update > self.update_thres:
             self.index = (self.index+1)%4
             self.imagify()
+
+            self.pos += self.vel
             
             self.last_update = now
         if now - self.last_update2 > self.update_thres2:
@@ -84,9 +89,6 @@ class GreenSlime(Enemy):
     
     def __init__(self,x,y,game,lane):
         super().__init__('Images/slime0.png',x,y,game,5,lane)
-        
-        
-
 
 
 class BlueSlime(Enemy):

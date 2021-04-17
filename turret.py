@@ -1,7 +1,7 @@
 from settings import *
 from utility import *
 from bullet import *
-import math
+
 
 class Turret(pg.sprite.Sprite):
     def __init__(self,type,r,c,game):
@@ -49,6 +49,7 @@ class CrossbowTurret(Turret):
         self.animation_frame = 0
 
 
+
     def update(self):
         if not self.active:
             self.image = self.animation_database[self.action][self.animation_frame]
@@ -73,9 +74,16 @@ class CrossbowTurret(Turret):
         if(self.action == 1 and int(self.animation_frame) == 6 and not self.shot):
             #shoot
             self.shot = True
-            self.arrow = Arrow(self.rect.center[0],self.rect.center[1],self.angle)
+            self.arrow = Arrow(*self.rect.center,self.angle)
+            self.arrow.damage = CROSSBOWDAMAGE
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
+
+            self.arrow.rect.center = self.rect.center
+            #pg.draw.rect(self.game.screen,(255,0,0),[*self.rect.center,4,4])
+            #pg.draw.rect(self.game.screen,(0,255,0),[*self.arrow.rect.center,4,4])
+            #pg.display.flip()
+            #pg.time.wait(100)
 
         self.last_time = pg.time.get_ticks()
 

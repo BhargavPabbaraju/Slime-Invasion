@@ -56,12 +56,19 @@ class Game(Baseclass):
 
         self.mapid = 1
         
+        
+
         self.map = Map(self)
 
         en = Enemy('Images/enemies.png',0,0,self,1,0)
         self.all_sprites.add(en)
         
         self.screen = disp
+        
+        self.last_update = pg.time.get_ticks()
+        self.enemy_spawn_delay = 500
+
+        self.paths = findpaths(self.mapid)
     
 
     def init_groups(self):
@@ -75,7 +82,25 @@ class Game(Baseclass):
     
     def events(self):
         mx,my = pg.mouse.get_pos()
-        #print(mx,my)
+        
+        now = pg.time.get_ticks()
+
+        if now - self.last_update > self.enemy_spawn_delay:
+            self.spawn_enemies()
+            self.last_update = now
+        
+        self.check_collisions()
+    
+
+    def spawn_enemies(self):
+        if len(self.enemies)>1:
+            return
+        typ = rd.choice([0,1])
+        lane = 0#rd.choice([0,1])
+        en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
+        self.all_sprites.add(en)
+        self.enemies.add(en)
+
         
                     
     
@@ -102,6 +127,11 @@ class Game(Baseclass):
             self.current_turret.toggle_shoot(True)
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
+    
+
+    def check_collisions(self):
+        pg.sprite.groupcollide(self.bullets, self.enemies,True, True)
+
 
 
                         

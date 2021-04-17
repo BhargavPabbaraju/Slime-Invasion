@@ -107,4 +107,18 @@ class Map(pg.sprite.Sprite):
         self.game.turret_index = 0
 
 
+        curline+=n_turrets+1
+
+        self.game.enemy_positions={0:[],1:[]}
+ 
+        self.game.enemy_positions[0] = list(map(int,lines[curline].split()))
+        self.game.enemy_positions[1] = list(map(int,lines[curline+1].split()))
+
+        
+       
+
+
+
+
+
         file.close()
