@@ -76,15 +76,8 @@ class Game(Baseclass):
     def events(self):
         mx,my = pg.mouse.get_pos()
         #print(mx,my)
-        for turret in self.turrets:
-            if turret.rect.collidepoint(mx,my):
-                clicks = pg.mouse.get_pressed()
-                if clicks[0]:
-                    self.current_turret.active = False
-                    self.current_turret.action = 0
-                    self.current_turret.animation_frame = 0
-                    self.current_turret = turret
-                    self.current_turret.active = True
+        
+                    
     
 
     def keyevents(self,key):
@@ -98,6 +91,14 @@ class Game(Baseclass):
 
     def mouseevents(self,button,action):
         if action == pg.MOUSEBUTTONDOWN and button == 1:
+            mx,my = pg.mouse.get_pos()
+            for turret in self.turrets:
+                if turret.rect.collidepoint(mx,my):
+                    self.current_turret.active = False
+                    self.current_turret.action = 0
+                    self.current_turret.animation_frame = 0
+                    self.current_turret = turret
+                    self.current_turret.active = True
             self.current_turret.toggle_shoot(True)
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)

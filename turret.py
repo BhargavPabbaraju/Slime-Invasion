@@ -24,7 +24,7 @@ class Turret(pg.sprite.Sprite):
 class Base(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
-        self.image = Spritesheet('Images/TowerBaseStone.png').scale(0,0,32,32,(0,0,0),2)
+        self.image = Spritesheet('Images/TowerBaseStone.png').scale(0,0,32,32,(0,0,0),1.5)
         self.rect = self.image.get_rect()
 
 class CrossbowTurret(Turret):
@@ -33,7 +33,7 @@ class CrossbowTurret(Turret):
 
         self.base = Base()
         self.sheet = Spritesheet('Images/CrossbowSheet.png')
-        self.image = self.sheet.scale(0,0,48,32,(0,0,0),1.75)
+        self.image = self.sheet.scale(0,0,48,32,(0,0,0),1.25)
         self.spr = self.image.copy()
         self.rect = self.image.get_rect()
         self.base.rect.topleft = self.x,self.y
@@ -42,7 +42,7 @@ class CrossbowTurret(Turret):
         self.shot = False
 
         #load animations
-        self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1.75)
+        self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
 
         #animation variables
         self.action = 0
