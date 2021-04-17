@@ -79,6 +79,16 @@ class Game(Baseclass):
                     self.current_turret.active = False
                     self.current_turret = turret
                     self.current_turret.active = True
+    
+
+    def keyevents(self,key):
+        if key == pg.K_TAB:
+            self.current_turret.active = False
+            self.turret_index = (self.turret_index+1)%len(self.turrets)
+            self.current_turret = self.turrets.sprites()[self.turret_index]
+            self.current_turret.active = True
+
+
                         
 
 
@@ -97,6 +107,12 @@ class Main(Baseclass):
                 if event.type == pg.QUIT:
                     pg.quit()
                     sys.exit()
+                
+                if event.type == pg.KEYDOWN:
+                    if self.game_state ==1:
+                        self.game.keyevents(event.key)
+
+
             if self.game_state == 0:
                 #menu
                 self.menu.events()

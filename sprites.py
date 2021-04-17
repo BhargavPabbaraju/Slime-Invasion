@@ -103,6 +103,7 @@ class Map(pg.sprite.Sprite):
 
         first_turret.active = True
         self.game.current_turret = first_turret
+        self.game.turret_index = 0
 
 
 
