@@ -73,7 +73,7 @@ class CrossbowTurret(Turret):
         if(self.action == 1 and int(self.animation_frame) == 6 and not self.shot):
             #shoot
             self.shot = True
-            self.arrow = Arrow(self.rect.x,self.rect.y,self.angle)
+            self.arrow = Arrow(self.rect.center[0],self.rect.center[1],self.angle)
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
 
