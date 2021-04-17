@@ -17,8 +17,7 @@ class Enemy(pg.sprite.Sprite):
         self.index = 0
         self.x = x
         self.y = y
-        self.waypoint_index = 0
-        self.target = waypoints[self.waypoint_index]
+        
 
         self.pos = vec(self.x,self.y)
         self.imagify()
@@ -52,6 +51,7 @@ class Enemy(pg.sprite.Sprite):
     
 
     def move(self):
+        return
         if self.rect.x < self.target[0]:
             self.rect.topleft += self.vel
         elif self.rect.x > self.target[0]:
@@ -89,12 +89,16 @@ class GreenSlime(Enemy):
     
     def __init__(self,x,y,game,lane):
         super().__init__('Images/slime0.png',x,y,game,5,lane)
+        
+        self.hp = GREENSLIMEHEALTH
 
 
 class BlueSlime(Enemy):
 
     def __init__(self,x,y,game,lane):
         super().__init__('Images/slime1.png',x,y,game,10,lane)
+
+        self.hp = BLUESLIMEHEALTH
 
 
 

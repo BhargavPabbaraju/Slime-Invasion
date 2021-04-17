@@ -59,9 +59,6 @@ class Game(Baseclass):
         
 
         self.map = Map(self)
-
-        en = Enemy('Images/enemies.png',0,0,self,1,0)
-        self.all_sprites.add(en)
         
         self.screen = disp
         
@@ -69,6 +66,7 @@ class Game(Baseclass):
         self.enemy_spawn_delay = 500
 
         self.paths = findpaths(self.mapid)
+
     
 
     def init_groups(self):
@@ -132,8 +130,9 @@ class Game(Baseclass):
     def check_collisions(self):
         for enemy in self.enemies:
             hits = pg.sprite.spritecollideany(enemy,self.bullets)
-            if hits:
-                enemy.damage
+            for hit in hits:
+                enemy.hp -= hit.damage
+                
 
         pg.sprite.groupcollide(self.bullets, self.enemies,True, True)
 
