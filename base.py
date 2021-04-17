@@ -129,6 +129,11 @@ class Game(Baseclass):
     
 
     def check_collisions(self):
+        for enemy in self.enemies:
+            hits = pg.sprite.spritecollideany(enemy,self.bullets)
+            if hits:
+                enemy.damage
+
         pg.sprite.groupcollide(self.bullets, self.enemies,True, True)
 
 
