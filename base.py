@@ -58,7 +58,7 @@ class Game(Baseclass):
         
         self.map = Map(self)
 
-        en = Enemy()
+        en = Enemy('Images/enemies.png',0,0,self,1,0)
         self.all_sprites.add(en)
         
         self.screen = disp

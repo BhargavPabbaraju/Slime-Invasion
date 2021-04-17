@@ -107,8 +107,4 @@ class Map(pg.sprite.Sprite):
         self.game.turret_index = 0
 
 
-
-
-
-
         file.close()
