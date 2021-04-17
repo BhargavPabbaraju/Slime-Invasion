@@ -18,7 +18,9 @@ class Enemy(pg.sprite.Sprite):
         self.x = x
         self.y = y
         self.waypoint_index = 0
-        self.target = waypoints[self.waypoint_index]
+        self.lane = 0
+        self.waypoints = self.game.paths[self.lane]
+        self.target = self.waypoints[self.waypoint_index]
 
         self.pos = vec(self.x,self.y)
         self.imagify()
@@ -63,7 +65,7 @@ class Enemy(pg.sprite.Sprite):
 
         if self.rect.y == self.target[1] and self.rect.x == self.target[0]:
             self.waypoint_index += 1
-            self.target = waypoints[self.waypoint_index]
+            self.target = self.waypoints[self.waypoint_index]
 
         self.x = self.rect.x
         self.y = self.rect.y

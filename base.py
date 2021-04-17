@@ -60,8 +60,7 @@ class Game(Baseclass):
 
         self.map = Map(self)
 
-        en = Enemy('Images/enemies.png',0,0,self,1,0)
-        self.all_sprites.add(en)
+        
         
         self.screen = disp
         
@@ -69,6 +68,10 @@ class Game(Baseclass):
         self.enemy_spawn_delay = 500
 
         self.paths = findpaths(self.mapid)
+
+        en = Enemy('Images/slime0.png',0,0,self,1,0)
+        self.all_sprites.add(en)
+        self.enemies.add(en)
     
 
     def init_groups(self):
@@ -86,7 +89,7 @@ class Game(Baseclass):
         now = pg.time.get_ticks()
 
         if now - self.last_update > self.enemy_spawn_delay:
-            self.spawn_enemies()
+            #self.spawn_enemies()
             self.last_update = now
         
         self.check_collisions()
