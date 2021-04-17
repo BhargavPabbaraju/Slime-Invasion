@@ -47,12 +47,24 @@ class CrossbowTurret(Turret):
     def update(self):
         if not self.active:
             return
+
+        print(pg.time.get_ticks())
+        self.animation_frame += pg.time.get_ticks()/1000
+        if int(self.animation_frame) >= len(self.animation_database[self.action]):
+            self.animation_frame = 0
+
         self.mx,self.my = pg.mouse.get_pos()
         self.angle = math.degrees(math.atan2(self.mx-self.rect.center[0],self.my-self.rect.center[1])) - 90
-
-        self.image = pg.transform.rotate(self.animation_database[self.action][self.animation_frame],self.angle)
+        self.image = pg.transform.rotate(self.animation_database[self.action][int(self.animation_frame)],self.angle)
         self.rect = self.image.get_rect()
         self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
+
+    def toggle_shoot(self):
+        if self.action == 1:
+            self.action = 0
+        elif self.action == 0:
+            self.action = 1
+        print(self.action)
 
 
 

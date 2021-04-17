@@ -88,6 +88,10 @@ class Game(Baseclass):
             self.current_turret = self.turrets.sprites()[self.turret_index]
             self.current_turret.active = True
 
+    def mouseevents(self,button):
+        if button == 1:
+            self.current_turret.toggle_shoot()
+
 
                         
 
@@ -111,6 +115,9 @@ class Main(Baseclass):
                 if event.type == pg.KEYDOWN:
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
+
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    self.game.mouseevents(event.button)
 
 
             if self.game_state == 0:
