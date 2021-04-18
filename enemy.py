@@ -20,6 +20,7 @@ class Enemy(pg.sprite.Sprite):
         self.waypoint_index = 0
         self.waypoints = self.game.paths[self.lane]
         self.target = self.waypoints[self.waypoint_index]
+        self.isActive = True
 
         self.pos = vec(self.x,self.y)
         self.imagify()
@@ -28,7 +29,7 @@ class Enemy(pg.sprite.Sprite):
         
         self.last_update = pg.time.get_ticks()
         self.last_update2 = pg.time.get_ticks()
-        self.update_thres = 250
+        self.update_thres = 200
         self.update_thres2 = 10
 
         self.last_moved = pg.time.get_ticks()
@@ -37,6 +38,9 @@ class Enemy(pg.sprite.Sprite):
         #self.last_switched = pg.time.get_ticks()
 
         self.animation_database = self.sheet.load_animation(32,32,self.color,1)
+        self.animation_frame = 0
+        self.action = 0
+        self.animation_framerate = 5
 
         self.speed = speed 
 
@@ -95,7 +99,6 @@ class Enemy(pg.sprite.Sprite):
 
             else:
                 ind = int(ind*factor)
-            print(ind)
             self.lane = 0
             if ind>=len1:
                 self.kill()
@@ -112,17 +115,31 @@ class Enemy(pg.sprite.Sprite):
 
     
     def update(self):
-        
-        now = pg.time.get_ticks()
-        
+        self.animation_frame += deltaTime(self.last_update) * self.animation_framerate
+        if int(self.animation_frame) >= len(self.animation_database[self.action]):
+            if self.action == 2:
+                self.kill()
+            self.animation_frame = 0
+            if self.action == 0:
+                self.action = 1
+            elif self.action ==1:
+                self.action = 0
 
-        if now - self.last_update > self.update_thres:
+        self.image = self.animation_database[self.action][int(self.animation_frame)]
+        
+        if not self.isActive:
+            self.last_update = pg.time.get_ticks()
+            return
+
+        now = pg.time.get_ticks()
+
+        '''if now - self.last_update > self.update_thres:
             self.index = (self.index+1)%4
             self.imagify()
 
             self.pos += self.vel
             
-            self.last_update = now
+            self.last_update = now'''
 
         if now - self.last_update2 > self.update_thres2:
             self.move()
@@ -136,7 +153,11 @@ class Enemy(pg.sprite.Sprite):
 
 
         if self.hp<=0:
-            self.kill()
+            #self.kill()
+            self.isActive = False
+            self.action = 2
+        self.last_update = pg.time.get_ticks()
+
 
 class GreenSlime(Enemy):
     

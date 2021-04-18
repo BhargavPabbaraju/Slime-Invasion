@@ -141,7 +141,8 @@ class Game(Baseclass):
             hits = pg.sprite.spritecollide(enemy,self.bullets,True)
             if hits:
                 for hit in hits:
-                    enemy.hp -= hit.damage 
+                    if(enemy.isActive):
+                        enemy.hp -= hit.damage 
                 
 
 
