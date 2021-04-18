@@ -67,7 +67,7 @@ class Game(Baseclass):
 
         self.screen = disp
     
-        self.last_update = pg.time.get_ticks()
+        
         
 
         self.paths = findpaths(self.mapid)
@@ -77,7 +77,12 @@ class Game(Baseclass):
 
         self.wave = 1
         self.n = self.wave * ENEMYMULTIPLIER
-        self.delay = self.wave * DELAYMULTIPLIER
+        self.spawned_enemies = 0
+        self.wave_delay = self.wave * DELAYMULTIPLIER
+
+        self.last_update = pg.time.get_ticks()
+        self.last_wave = pg.time.get_ticks()
+        self.stop_spawning = False
         
     
 
@@ -97,14 +102,15 @@ class Game(Baseclass):
         
         now = pg.time.get_ticks()
 
-        if now - self.last_update > self.delay*10**3:
+        if now - self.last_update > INBETWEENDELAY*10**3:
             self.spawn_enemies()
             self.last_update = now
 
         if now - self.last_switched > 10000:
             for enemy in self.enemies:
                 enemy.switch_lane()
-                self.last_switched = now
+            
+            self.last_switched = now
         
         
 
@@ -113,15 +119,41 @@ class Game(Baseclass):
     
 
     def spawn_enemies(self):
-        # if len(self.enemies)>1:
-        #     return
-        typ = rd.choice([0,1])
-        lane = rd.choice([0,1])
-        en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
-        self.all_sprites.add(en)
-        self.enemies.add(en)
+
+        now = pg.time.get_ticks()
+
+
+        if self.spawned_enemies==self.n and not self.stop_spawning:
+            self.stop_spawning = True
+            self.last_wave = now
+
+        print(self.wave,self.wave_delay,self.spawned_enemies,self.n,now-self.last_wave)
+        if now - self.last_wave > self.wave_delay * 10**3:
+            self.stop_spawning = False
+            self.last_wave = now
+
+            self.wave += 1
+            self.n = self.wave * ENEMYMULTIPLIER
+            self.spawned_enemies = 0
+            self.wave_delay = self.wave * DELAYMULTIPLIER
+
+
 
         
+
+
+        
+
+        if not self.stop_spawning:
+            typ = rd.choice([0,1])
+            lane = rd.choice([0,1])
+            en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
+            self.all_sprites.add(en)
+            self.enemies.add(en)
+            self.spawned_enemies += 1
+        
+
+
 
         
                     
