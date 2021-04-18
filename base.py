@@ -65,7 +65,7 @@ class Game(Baseclass):
         self.screen = disp
         
         self.last_update = pg.time.get_ticks()
-        self.enemy_spawn_delay = 1000
+        self.enemy_spawn_delay = 3000
 
         self.paths = findpaths(self.mapid)
 

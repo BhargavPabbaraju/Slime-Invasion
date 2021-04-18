@@ -10,13 +10,14 @@ class Bullet(pg.sprite.Sprite):
 
         self.image = pg.Surface((50,100))
         self.rect = self.image.get_rect()
+        self.active = True
 
 class Arrow(Bullet):
     def __init__(self,x,y,angle):
         super().__init__()
 
         #Properties
-        self.speed = 12.5
+        self.speed = 15
         self.last_time = 0
         self.angle = angle 
 
@@ -33,6 +34,8 @@ class Arrow(Bullet):
         self.rect.center = vec(self.rect.x,self.rect.y)
 
     def update(self):
+        if not self.active:
+            return
         if pg.time.get_ticks() - self.last_update > 10:
             self.rect.center += self.v
             self.last_update = pg.time.get_ticks()

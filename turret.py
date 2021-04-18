@@ -37,7 +37,7 @@ class CrossbowTurret(Turret):
         self.spr = self.image.copy()
         self.rect = self.image.get_rect()
         self.base.rect.topleft = self.x,self.y
-        self.animation_framerate = 22
+        self.animation_framerate = 52
         self.rect.center = self.base.rect.center
         self.shot = False
 
@@ -67,11 +67,11 @@ class CrossbowTurret(Turret):
         self.rect = self.image.get_rect()
         self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
 
-        if(self.action == 1 and int(self.animation_frame) == 5):
+        if(self.action == 1 and int(self.animation_frame) == 2):
             self.shot = False
 
         #shoot projectile
-        if(self.action == 1 and int(self.animation_frame) == 6 and not self.shot):
+        if(self.action == 1 and int(self.animation_frame) == 3 and not self.shot):
             #shoot
             self.shot = True
             self.arrow = Arrow(*self.rect.center,self.angle)
