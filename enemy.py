@@ -34,7 +34,7 @@ class Enemy(pg.sprite.Sprite):
         self.last_moved = pg.time.get_ticks()
         self.move_thres = 100
 
-        self.last_switched = pg.time.get_ticks()
+        #self.last_switched = pg.time.get_ticks()
 
         self.animation_database = self.sheet.load_animation(32,32,self.color,1)
 
@@ -91,7 +91,7 @@ class Enemy(pg.sprite.Sprite):
         
         else:
             if len2 == max(len1,len2):
-                ind = int(ind//factor)
+                ind = int(ind/factor)
 
             else:
                 ind = int(ind*factor)
@@ -129,10 +129,10 @@ class Enemy(pg.sprite.Sprite):
 
             self.last_update2 = now
         
-        if now - self.last_switched > 10*10**3:
+        '''if now - self.last_switched > 10*10**3:
             self.switch_lane()
 
-            self.last_switched = now
+            self.last_switched = now'''
 
 
         if self.hp<=0:

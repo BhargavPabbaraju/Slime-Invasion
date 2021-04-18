@@ -68,6 +68,7 @@ class Game(Baseclass):
         self.enemy_spawn_delay = 3000
 
         self.paths = findpaths(self.mapid)
+        self.last_switched = pg.time.get_ticks()
 
     
 
@@ -88,6 +89,11 @@ class Game(Baseclass):
         if now - self.last_update > self.enemy_spawn_delay:
             self.spawn_enemies()
             self.last_update = now
+
+        if now - self.last_switched > 10000:
+            for enemy in self.enemies:
+                enemy.switch_lane()
+                self.last_switched = now
         
 
         self.check_collisions()
