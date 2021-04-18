@@ -125,8 +125,21 @@ class Map(pg.sprite.Sprite):
 
 
 class ScreenFlash(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,game):
         super().__init__()
 
         self.image = pg.image.load('Images/ScreenFlash.png').convert_alpha()
         self.rect = self.image.get_rect()
+
+        self.image.set_alpha(0)
+
+        self.last_time = pg.time.get_ticks()
+
+        self.game = game
+    
+    def update(self):
+
+        self.new_alpha = 255 * (pg.time.get_ticks() - self.game.last_switched)/15000
+        self.image.set_alpha(Lerp(self.image.get_alpha(),self.new_alpha,deltaTime(self.last_time)))
+        self.last_time = pg.time.get_ticks()
+
