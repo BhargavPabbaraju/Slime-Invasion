@@ -62,6 +62,7 @@ class Game(Baseclass):
 
         self.screenflash = ScreenFlash(self)
         self.all_sprites.add(self.screenflash)
+        self.life = Life(self)
         
 
         self.screen = disp
@@ -91,6 +92,7 @@ class Game(Baseclass):
         self.bullets = pg.sprite.Group()
     
     def events(self):
+        self.life.update()
         mx,my = pg.mouse.get_pos()
         
         now = pg.time.get_ticks()

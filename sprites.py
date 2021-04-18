@@ -3,6 +3,7 @@ from turret import *
 from enemy import *
 from utility import *
 from settings import *
+from life import *
 
 class Tile(pg.sprite.Sprite):
     def __init__(self,type,row,column,game):
