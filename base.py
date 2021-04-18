@@ -7,6 +7,8 @@ class Baseclass:
         self.screen = pg.Surface((width,height))
         self.init_groups()
         self.clock = pg.time.Clock()
+
+        
     
 
     def init_groups(self):
@@ -70,6 +72,7 @@ class Game(Baseclass):
         self.paths = findpaths(self.mapid)
         self.last_switched = pg.time.get_ticks()
 
+        
     
 
     def init_groups(self):
