@@ -67,15 +67,16 @@ class Game(Baseclass):
         self.screen = disp
     
         self.last_update = pg.time.get_ticks()
-        self.enemy_spawn_delay = 3000
+        
 
         self.paths = findpaths(self.mapid)
+
         self.last_switched = pg.time.get_ticks()
-        self.last_time = pg.time.get_ticks()
+
 
         self.wave = 1
-        self.n = ENEMIESPERWAVE
-        self.current_enemies = 0
+        self.n = self.wave * ENEMYMULTIPLIER
+        self.delay = self.wave * DELAYMULTIPLIER
         
     
 
@@ -94,7 +95,7 @@ class Game(Baseclass):
         
         now = pg.time.get_ticks()
 
-        if now - self.last_update > self.enemy_spawn_delay:
+        if now - self.last_update > self.delay*10**3:
             self.spawn_enemies()
             self.last_update = now
 
@@ -117,6 +118,8 @@ class Game(Baseclass):
         en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
         self.all_sprites.add(en)
         self.enemies.add(en)
+
+        
 
         
                     
