@@ -137,24 +137,14 @@ class Enemy(pg.sprite.Sprite):
 
         now = pg.time.get_ticks()
 
-        '''if now - self.last_update > self.update_thres:
-            self.index = (self.index+1)%4
-            self.imagify()
-
-            self.pos += self.vel
-            
-            self.last_update = now'''
+      
 
         if now - self.last_update2 > self.update_thres2:
             self.move()
 
             self.last_update2 = now
         
-        '''if now - self.last_switched > 10*10**3:
-            self.switch_lane()
-
-            self.last_switched = now'''
-
+  
 
         if self.hp<=0:
             #self.kill()

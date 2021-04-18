@@ -60,9 +60,9 @@ class Game(Baseclass):
 
         self.map = Map(self)
 
-        self.screenflash = pg.sprite.Sprite(self.all_sprites)
-        self.screenflash.image = pg.image.load('Images/ScreenFlash.png')
-        self.screenflash.rect = self.screenflash.image.get_rect()
+        self.screenflash = ScreenFlash()
+        self.all_sprites.add(self.screenflash)
+        
 
         self.screen = disp
     
@@ -71,7 +71,11 @@ class Game(Baseclass):
 
         self.paths = findpaths(self.mapid)
         self.last_switched = pg.time.get_ticks()
+        
 
+        self.wave = 1
+        self.n = ENEMIESPERWAVE
+        self.current_enemies = 0
         
     
 

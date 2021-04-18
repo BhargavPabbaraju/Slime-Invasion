@@ -122,3 +122,11 @@ class Map(pg.sprite.Sprite):
 
 
         file.close()
+
+
+class ScreenFlash(pg.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+
+        self.image = pg.image.load('Images/ScreenFlash.png').convert_alpha()
+        self.rect = self.image.get_rect()
