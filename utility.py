@@ -52,6 +52,5 @@ def findpaths(mapid):
     for line in lines[curline:curline+n_paths]:
         paths[1].append(list(map(int,line.split())))
     
-
     return paths
 

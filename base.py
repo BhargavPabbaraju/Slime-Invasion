@@ -59,11 +59,13 @@ class Game(Baseclass):
         
 
         self.map = Map(self)
+
+        
         
         self.screen = disp
         
         self.last_update = pg.time.get_ticks()
-        self.enemy_spawn_delay = 500
+        self.enemy_spawn_delay = 1000
 
         self.paths = findpaths(self.mapid)
 
@@ -87,14 +89,15 @@ class Game(Baseclass):
             self.spawn_enemies()
             self.last_update = now
         
+
         self.check_collisions()
     
 
     def spawn_enemies(self):
-        if len(self.enemies)>1:
-            return
+        # if len(self.enemies)>1:
+        #     return
         typ = rd.choice([0,1])
-        lane = 0#rd.choice([0,1])
+        lane = rd.choice([0,1])
         en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
         self.all_sprites.add(en)
         self.enemies.add(en)
@@ -129,12 +132,14 @@ class Game(Baseclass):
 
     def check_collisions(self):
         for enemy in self.enemies:
-            hits = pg.sprite.spritecollideany(enemy,self.bullets)
-            for hit in hits:
-                enemy.hp -= hit.damage
+            hits = pg.sprite.spritecollide(enemy,self.bullets,True)
+            if hits:
+                for hit in hits:
+                    enemy.hp -= hit.damage 
                 
 
-        pg.sprite.groupcollide(self.bullets, self.enemies,True, True)
+
+        
 
 
 
