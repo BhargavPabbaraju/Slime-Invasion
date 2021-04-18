@@ -14,6 +14,8 @@ class Turret(pg.sprite.Sprite):
         self.y = self.r*32
         self.game = game
         self.last_time = pg.time.get_ticks()
+        self.ammo = 5
+        self.max_ammo = 5
 
 
         self.image = pg.Surface((50,100))
@@ -26,6 +28,23 @@ class Base(pg.sprite.Sprite):
         super().__init__()
         self.image = Spritesheet('Images/TowerBaseStone.png').scale(0,0,32,32,(0,0,0),1.5)
         self.rect = self.image.get_rect()
+
+class AmmoBar(pg.sprite.Sprite):
+    def __init__(self,maxammo,game,x,y):
+        super().__init__()
+        self.maxammo = maxammo
+        self.ammo = maxammo
+        self.imagesource = pg.image.load('Images/redsquare.png').convert()
+        self.image = pg.transform.scale(self.imagesource,(self.ammo * AMMOBARWIDTH,5))
+        self.rect = self.image.get_rect()
+        self.rect.x = x
+        self.rect.y = y
+
+    def set_ammo(self,ammo):
+        self.ammo = ammo
+
+    def update(self):
+        self.image = pg.transform.scale(self.imagesource,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
 
 class CrossbowTurret(Turret):
     def __init__(self,type,r,c,game):
@@ -40,6 +59,9 @@ class CrossbowTurret(Turret):
         self.animation_framerate = 52
         self.rect.center = self.base.rect.center
         self.shot = False
+        self.max_ammo = 25
+        self.ammo = self.max_ammo
+        self.ammobar = AmmoBar(self.ammo,self.game,self.rect.x,self.rect.y)
 
         #load animations
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
@@ -51,12 +73,19 @@ class CrossbowTurret(Turret):
 
 
     def update(self):
+        self.ammobar.set_ammo(int(self.ammo))
         if not self.active:
+            self.ammo += 2 * deltaTime(self.last_time)
+            if self.ammo > self.max_ammo:
+                self.ammo = self.max_ammo
             self.image = self.animation_database[self.action][self.animation_frame]
             self.rect = self.image.get_rect()
             self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
+            self.last_time = pg.time.get_ticks()
             return
 
+        if self.action != 1:
+            self.ammo += 0.5 * deltaTime(self.last_time)
         self.animation_frame += deltaTime(self.last_time) * self.animation_framerate
         if int(self.animation_frame) >= len(self.animation_database[self.action]):
             self.animation_frame = 0
@@ -67,13 +96,17 @@ class CrossbowTurret(Turret):
         self.rect = self.image.get_rect()
         self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
 
+        if (self.action == 1 and self.ammo <= 0):
+            self.action = 0
+
         if(self.action == 1 and int(self.animation_frame) <= 2):
             self.shot = False
 
         #shoot projectile
-        if(self.action == 1 and int(self.animation_frame) >= 5 and not self.shot):
+        if(self.action == 1 and int(self.animation_frame) >= 5 and not self.shot and self.ammo > 0):
             #shoot
             self.shot = True
+            self.ammo -= 1
             self.arrow = Arrow(*self.rect.center,self.angle)
             self.arrow.damage = CROSSBOWDAMAGE
             self.game.all_sprites.add(self.arrow)
@@ -84,7 +117,6 @@ class CrossbowTurret(Turret):
             #pg.draw.rect(self.game.screen,(0,255,0),[*self.arrow.rect.center,4,4])
             #pg.display.flip()
             #pg.time.wait(100)
-
         self.last_time = pg.time.get_ticks()
 
     def toggle_shoot(self,val):
