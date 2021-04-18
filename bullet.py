@@ -17,7 +17,7 @@ class Arrow(Bullet):
         super().__init__()
 
         #Properties
-        self.speed = 15
+        self.speed = 20
         self.last_time = 0
         self.deviation = (rd.random()-0.5) * 5
         self.angle = angle + self.deviation
