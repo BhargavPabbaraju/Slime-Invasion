@@ -56,16 +56,16 @@ class Game(Baseclass):
     def __init__(self):
         super().__init__()
 
-        self.mapid = 1
-        
-        
+        self.mapid = 1        
 
         self.map = Map(self)
 
-        
-        
+        self.screenflash = pg.sprite.Sprite(self.all_sprites)
+        self.screenflash.image = pg.image.load('Images/ScreenFlash.png')
+        self.screenflash.rect = self.screenflash.image.get_rect()
+
         self.screen = disp
-        
+    
         self.last_update = pg.time.get_ticks()
         self.enemy_spawn_delay = 3000
 
@@ -82,6 +82,7 @@ class Game(Baseclass):
         self.tiles = pg.sprite.Group()
         self.turrets = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
+        #self.antienemies = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
     
     def events(self):
@@ -98,6 +99,8 @@ class Game(Baseclass):
                 enemy.switch_lane()
                 self.last_switched = now
         
+        #self.new_alpha = 255 * (pg.time.get_ticks() - self.last_switched)/25000
+        self.screenflash.image.set_alpha(255 * (pg.time.get_ticks() - self.last_switched)/25000)
 
         self.check_collisions()
     
