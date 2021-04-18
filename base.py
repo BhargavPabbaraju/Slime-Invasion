@@ -60,9 +60,10 @@ class Game(Baseclass):
 
         self.map = Map(self)
 
-        self.screenflash = ScreenFlash()
-        self.all_sprites.add(self.screenflash)
-        
+        self.screenflash = pg.sprite.Sprite(self.all_sprites)
+        self.screenflash.image = pg.image.load('Images/ScreenFlash.png')
+        self.screenflash.rect = self.screenflash.image.get_rect()
+        self.screenflash.image.set_alpha(0)
 
         self.screen = disp
     
@@ -71,7 +72,7 @@ class Game(Baseclass):
 
         self.paths = findpaths(self.mapid)
         self.last_switched = pg.time.get_ticks()
-        
+        self.last_time = pg.time.get_ticks()
 
         self.wave = 1
         self.n = ENEMIESPERWAVE
@@ -103,10 +104,11 @@ class Game(Baseclass):
                 enemy.switch_lane()
                 self.last_switched = now
         
-        #self.new_alpha = 255 * (pg.time.get_ticks() - self.last_switched)/25000
-        self.screenflash.image.set_alpha(255 * (pg.time.get_ticks() - self.last_switched)/25000)
+        self.new_alpha = 255 * (pg.time.get_ticks() - self.last_switched)/15000
+        self.screenflash.image.set_alpha(Lerp(self.screenflash.image.get_alpha(),self.new_alpha,deltaTime(self.last_time)))
 
         self.check_collisions()
+        self.last_time = pg.time.get_ticks()
     
 
     def spawn_enemies(self):

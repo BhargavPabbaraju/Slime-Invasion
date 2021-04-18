@@ -54,3 +54,6 @@ def findpaths(mapid):
     
     return paths
 
+def Lerp(val1,val2,factor):
+     return (val1 + (val2 - val1) * factor)
+
