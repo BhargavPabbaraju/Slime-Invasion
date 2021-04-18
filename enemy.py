@@ -118,6 +118,8 @@ class Enemy(pg.sprite.Sprite):
         self.animation_frame += deltaTime(self.last_update) * self.animation_framerate
         if int(self.animation_frame) >= len(self.animation_database[self.action]):
             if self.action == 2:
+                self.action = 3
+            elif self.action ==3:
                 self.kill()
             self.animation_frame = 0
             if self.action == 0:
