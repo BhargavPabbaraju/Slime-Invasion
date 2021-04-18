@@ -69,8 +69,12 @@ class Enemy(pg.sprite.Sprite):
             self.rect.topleft -= self.vel2
 
         if self.rect.y == self.target[1] and self.rect.x == self.target[0]:
-            self.waypoint_index += 1
-            self.target = self.waypoints[self.waypoint_index]
+            if self.waypoint_index+1 < len(self.waypoints):
+                self.waypoint_index += 1
+                self.target = self.waypoints[self.waypoint_index]
+            else :
+                self.game.life.deduct()
+                self.kill()
 
         self.x = self.rect.x
         self.y = self.rect.y
