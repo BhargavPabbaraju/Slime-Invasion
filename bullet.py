@@ -1,4 +1,4 @@
-import math  
+import math
 from utility import *
 from settings import *
 
@@ -19,7 +19,8 @@ class Arrow(Bullet):
         #Properties
         self.speed = 15
         self.last_time = 0
-        self.angle = angle 
+        self.deviation = (rd.random()-0.5) * 5
+        self.angle = angle + self.deviation
 
         self.image = pg.image.load('Images/arrow.png')
         self.image = pg.transform.rotate(self.image,self.angle)
