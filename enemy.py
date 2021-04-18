@@ -76,6 +76,8 @@ class Enemy(pg.sprite.Sprite):
         self.y = self.rect.y
 
     def switch_lane(self):
+        if not self.isActive:
+            return
         len1 = len(self.game.paths[0])
         len2 = len(self.game.paths[1])
 
