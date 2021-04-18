@@ -127,7 +127,7 @@ class Game(Baseclass):
             self.stop_spawning = True
             self.last_wave = now
 
-        print(self.wave,self.wave_delay,self.spawned_enemies,self.n,now-self.last_wave)
+        
         if now - self.last_wave > self.wave_delay * 10**3:
             self.stop_spawning = False
             self.last_wave = now
