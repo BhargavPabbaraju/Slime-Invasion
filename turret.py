@@ -67,11 +67,11 @@ class CrossbowTurret(Turret):
         self.rect = self.image.get_rect()
         self.rect.center = [self.base.rect.center[0],self.base.rect.center[1]]
 
-        if(self.action == 1 and int(self.animation_frame) == 2):
+        if(self.action == 1 and int(self.animation_frame) <= 2):
             self.shot = False
 
         #shoot projectile
-        if(self.action == 1 and int(self.animation_frame) == 3 and not self.shot):
+        if(self.action == 1 and int(self.animation_frame) >= 5 and not self.shot):
             #shoot
             self.shot = True
             self.arrow = Arrow(*self.rect.center,self.angle)
