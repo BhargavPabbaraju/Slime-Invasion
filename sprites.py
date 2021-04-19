@@ -123,7 +123,7 @@ class Map(pg.sprite.Sprite):
         for line in lines[curline:curline+n_avail_turrets]:
             self.game.available_turrets.append(int(line))
 
-        print(self.game.available_turrets)
+        #print(self.game.available_turrets)
 
         file.close()
 
