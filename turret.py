@@ -4,20 +4,20 @@ from bullet import *
 
 
 class Turret(pg.sprite.Sprite):
-    def __init__(self,type,r,c,game):
+    def __init__(self,type,r,c,game,base):
         super().__init__()
 
         self.type = type
         self.r = r -1
         self.c = c -1
-        self.x = self.c*32 
-        self.y = self.r*32
+        self.x = self.r
+        self.y = self.c
         self.game = game
         self.last_time = pg.time.get_ticks()
         self.ammo = 5
         self.max_ammo = 5
 
-        self.base = Base()
+        self.base = base
         self.sheet = Spritesheet('Images/CrossbowSheet.png')
         self.image = self.sheet.scale(0,0,48,32,(0,0,0),1.25)
         self.spr = self.image.copy()
@@ -97,18 +97,34 @@ class Turret(pg.sprite.Sprite):
         self.animation_frame = 0
 
 class ShopUI(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,game):
         super().__init__()
+        self.game = game
+        self.turret_icons = pg.sprite.Group()
+        game.all_sprites.add(self)
         self.image = pg.image.load('Images/shopUI_bg.png')
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH - self.image.get_width()
         self.rect.y = 0
+        self.selected_turret = 0
+
+        for x in range(len(self.game.available_turrets)):
+            self.icon = pg.sprite.Sprite(self.game.all_sprites)
+            self.icon.image = pg.transform.scale(TURRETIMAGES[self.game.available_turrets[x]],(90,80))
+            self.icon.rect = self.icon.image.get_rect()
+            self.icon.rect.x = self.rect.x
+            self.icon.rect.y = self.rect.y + 100*x
+            self.icon.value = self.game.available_turrets[x]
+            self.turret_icons.add(self.icon)
 
 class Base(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y):
         super().__init__()
         self.image = Spritesheet('Images/TowerBaseStone.png').scale(0,0,32,32,(0,0,0),1.5)
         self.rect = self.image.get_rect()
+        self.turret_val = -1
+        self.turret = None
+        self.rect.center = [x*32,y*32]
 
 class AmmoBar(pg.sprite.Sprite):
     def __init__(self,maxammo,game,x,y):
@@ -128,12 +144,12 @@ class AmmoBar(pg.sprite.Sprite):
         self.image = pg.transform.scale(self.imagesource,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
 
 class CrossbowTurret(Turret):
-    def __init__(self,type,r,c,game):
-        super().__init__(type,r,c,game)
+    def __init__(self,type,r,c,game,base):
+        super().__init__(type,r,c,game,base)
 
 class TripleCrossbowTurret(Turret):
-    def __init__(self,type,r,c,game):
-        super().__init__(type,r,c,game)
+    def __init__(self,type,r,c,game,base):
+        super().__init__(type,r,c,game,base)
         self.sheet = Spritesheet('Images/TripleCrossbowSheet.png')
         self.animation_framerate = 15
         
@@ -157,3 +173,9 @@ TURRETCLASSES = {
     0 : CrossbowTurret,
     1 : TripleCrossbowTurret
 }
+
+TURRETIMAGES = {
+    0 : pg.image.load('Images/CrossbowIcon.png'),
+    1 : pg.image.load('Images/TripleCrossbowIcon.png')
+}
+

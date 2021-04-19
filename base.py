@@ -61,8 +61,7 @@ class Game(Baseclass):
         self.screenflash = ScreenFlash(self)
         self.all_sprites.add(self.screenflash)
         self.life = Life(self)
-        self.shop = ShopUI()
-        self.all_sprites.add(self.shop)
+        self.shop = ShopUI(self)
         
 
         self.screen = disp
@@ -97,6 +96,7 @@ class Game(Baseclass):
 
         self.all_sprites = pg.sprite.Group()
         self.tiles = pg.sprite.Group()
+        self.bases = pg.sprite.Group()
         self.turrets = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         #self.antienemies = pg.sprite.Group()
@@ -187,6 +187,19 @@ class Game(Baseclass):
                     self.current_turret = turret
                     self.current_turret.active = True
             self.current_turret.toggle_shoot(True)
+
+            self.mx,self.my = pg.mouse.get_pos()
+            for icon in self.shop.turret_icons:
+                if icon.rect.collidepoint(self.mx,self.my):
+                    self.shop.selected_turret = icon.value
+
+            for base in self.bases:
+                if base.rect.collidepoint(self.mx,self.my):
+                    if base.turret_val == -1:
+                        base.turret_val = self.shop.selected_turret
+                        base.turret = TURRETCLASSES[self.shop.selected_turret](self.shop.selected_turret,base.rect.x,base.rect.y,self,base)
+                        self.all_sprites.add(base.turret)
+                        self.turrets.add(base.turret)
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
     
@@ -205,7 +218,6 @@ class Game(Baseclass):
                 for hit in hits:
                     if(enemy.isActive):
                         enemy.hp -= hit.damage
-    
 
     def gameover(self):
         self.menu.gameovermenu = GameoverMenu(self,self.menu)
