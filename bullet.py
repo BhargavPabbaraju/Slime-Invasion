@@ -13,13 +13,13 @@ class Bullet(pg.sprite.Sprite):
         self.active = True
 
 class Arrow(Bullet):
-    def __init__(self,x,y,angle):
+    def __init__(self,x,y,angle,spread):
         super().__init__()
 
         #Properties
         self.speed = 20
         self.last_time = 0
-        self.deviation = (rd.random()-0.5) * 5
+        self.deviation = (rd.random()-0.5) * spread
         self.angle = angle + self.deviation
 
         self.image = pg.image.load('Images/arrow.png')
