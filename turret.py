@@ -121,6 +121,8 @@ class ShopUI(pg.sprite.Sprite):
             self.icon.rect.y = self.rect.y + 100*x
             self.icon.value = self.game.available_turrets[x]
             self.turret_icons.add(self.icon)
+            self.icon.cost_text = Text(self.icon.rect.x + 20,self.icon.rect.y + 80,"Cost: %d"%TURRETCOSTS[x],self.game,16)
+            self.game.all_sprites.add(self.icon.cost_text)
 
 class Base(pg.sprite.Sprite):
     def __init__(self,x,y):
