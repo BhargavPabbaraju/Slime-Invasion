@@ -235,11 +235,18 @@ class GameoverMenu(Baseclass):
         self.game = game
         self.texts = pg.sprite.Group()
         txts = ["Game Over","Waves Cleared : %d"%self.game.wave,"Highscore : %d"%self.game.score,"Play Again","Quit"]
+        txts2 = []
         txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
-        #txt.pos = 
-            
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]
+        txts2.append(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[1],txts[1],self.game,32,0,BLUE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[1][1]
+        txts2.append(txt)
+
+
+        for txt in txts2:
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
         
         
         
