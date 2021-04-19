@@ -56,9 +56,8 @@ class Game(Baseclass):
     def __init__(self):
         super().__init__()
 
-        self.mapid = 1        
+        self.mapid = 1
         self.available_turrets = []
-
 
         self.map = Map(self)
 
@@ -87,6 +86,9 @@ class Game(Baseclass):
         self.last_update = pg.time.get_ticks()
         self.last_wave = pg.time.get_ticks()
         self.stop_spawning = False
+
+        self.wave_text = Text(1*32,15*32,"Wave : %d"%self.wave,self,32)
+        self.all_sprites.add(self.wave_text)
         
     
 
@@ -140,6 +142,8 @@ class Game(Baseclass):
             self.n = self.wave * ENEMYMULTIPLIER
             self.spawned_enemies = 0
             self.wave_delay = self.wave * DELAYMULTIPLIER
+            self.wave_text.msg = "Wave : %d"%self.wave
+            
 
 
 
@@ -187,9 +191,16 @@ class Game(Baseclass):
             self.current_turret.toggle_shoot(False)
     
 
+    def new_collide(self,sprite1,sprite2):
+        if sprite1.hitrect.colliderect(sprite2.rect):
+            return True
+        
+        return False
+
+        
     def check_collisions(self):
         for enemy in self.enemies:
-            hits = pg.sprite.spritecollide(enemy,self.bullets,True)
+            hits = pg.sprite.spritecollide(enemy,self.bullets,True,self.new_collide)
             if hits:
                 for hit in hits:
                     if(enemy.isActive):
@@ -237,7 +248,14 @@ class Main(Baseclass):
                 #game
                 self.game.events()
                 self.game.draw()
-    
+
+                '''DRAWING HITRECTS
+                for enemy in self.game.enemies:
+                    #print('no')
+                    pg.draw.rect(self.game.screen,(255,0,0),enemy.hitrect,width=2)
+                
+                pg.display.flip()
+                '''
     
 
 
