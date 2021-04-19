@@ -159,14 +159,17 @@ class Enemy(pg.sprite.Sprite):
             #self.kill()
             self.isActive = False
             self.action = 2
+            self.game.score += SLIMESCORES[self.type]
+            self.game.score_text.msg = "Score : %d"%self.game.score
+           
+
         self.last_update = pg.time.get_ticks()
 
         self.hitrect = self.rect.copy()
         self.hitrect.height = 20
         self.hitrect.bottom = self.rect.bottom
 
-        #self.hitrect.center = self.rect.center
-        #pg.draw.rect(self.image,(255,0,0),[0,0,32,20],width=2)
+        
 
 
 class GreenSlime(Enemy):
@@ -176,6 +179,8 @@ class GreenSlime(Enemy):
         
         self.hp = GREENSLIMEHEALTH
 
+        self.type = 0
+
 
 class BlueSlime(Enemy):
 
@@ -183,6 +188,8 @@ class BlueSlime(Enemy):
         super().__init__('Images/slime1.png',x,y,game,1,lane)
 
         self.hp = BLUESLIMEHEALTH
+
+        self.type = 1
 
 
 

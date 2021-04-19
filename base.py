@@ -8,6 +8,8 @@ class Baseclass:
         self.init_groups()
         self.clock = pg.time.Clock()
 
+
+
         
     
 
@@ -40,20 +42,15 @@ class Baseclass:
             self.draw()
 
 
-class Menu(Baseclass):
-    def __init__(self):
-        super().__init__()
+
     
-    def events(self):
-        for event in pg.event.get():
-            if event.type == pg.KEYUP:
-                self.exit = True
+
 
 
 
 
 class Game(Baseclass):
-    def __init__(self):
+    def __init__(self,menu):
         super().__init__()
 
         self.mapid = 1
@@ -70,7 +67,7 @@ class Game(Baseclass):
 
         self.screen = disp
     
-        
+        self.menu = menu
         
 
         self.paths = findpaths(self.mapid)
@@ -87,9 +84,12 @@ class Game(Baseclass):
         self.last_wave = pg.time.get_ticks()
         self.stop_spawning = False
 
-        self.wave_text = Text(1*32,15*32,"Wave : %d"%self.wave,self,32)
+        self.wave_text = Text(*WAVETEXTPOSITION,"Wave : %d"%self.wave,self,32)
         self.all_sprites.add(self.wave_text)
         
+        self.score = 0
+        self.score_text = Text(*SCORETEXTPOSITION,"Score : %d"%self.score,self,32)
+        self.all_sprites.add(self.score_text)
     
 
     def init_groups(self):
@@ -205,13 +205,54 @@ class Game(Baseclass):
                 for hit in hits:
                     if(enemy.isActive):
                         enemy.hp -= hit.damage
-                
+    
+
+    def gameover(self):
+        self.menu.gameovermenu = GameoverMenu(self,self.menu)
+        self.menu.gameovermenu.screen2 = disp.copy()
+        self.menu.game_state = 3
 
 
         
 
 
+class GameoverMenu(Baseclass):
+    def __init__(self,game,menu):
+        super().__init__()
+        
+        self.game = game
+        self.texts = pg.sprite.Group()
+        txts = ["Game Over","Waves Cleared : %d"%self.game.wave,"Highscore : %d"%self.game.score,"Play Again","Quit"]
+        for i in range(len(txts)):
+            size = 72 if i==0 else 32 if i<3 else 42
 
+            txt = Text(*GAMEOVERTEXTPOSITIONS[i],txts[i],self.game,size,i,BLACK)
+            
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+        
+        
+        
+        self.screen = disp
+        
+
+
+    def draw(self):
+        
+        self.screen.fill(-1)
+        self.screen.blit(self.screen2,(0,0))
+        self.all_sprites.update()
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
+        self.clock.tick(60)
+
+
+    
+    def events(self):
+        pass
+
+        
+            
                         
 
 
@@ -219,10 +260,12 @@ class Main(Baseclass):
     def __init__(self):
         super().__init__()
         self.game_state = 1
-        self.menu = Menu()
-        self.game = Game()
-        #0 == Menu
+        self.game = Game(self)
+        
+        #0 == InitialMenu
         #1 == Game
+        #2 == PauseMenu
+        #3 == GameoverMenu
 
     def loop(self):
         while not self.exit:
@@ -248,20 +291,16 @@ class Main(Baseclass):
                 #game
                 self.game.events()
                 self.game.draw()
+            
+            elif self.game_state == 3:
+                self.gameovermenu.events()
+                self.gameovermenu.draw()
 
-                '''DRAWING HITRECTS
-                for enemy in self.game.enemies:
-                    #print('no')
-                    pg.draw.rect(self.game.screen,(255,0,0),enemy.hitrect,width=2)
                 
-                pg.display.flip()
-                '''
-    
 
 
 
         
-    
 
 main = Main()
 main.loop()
