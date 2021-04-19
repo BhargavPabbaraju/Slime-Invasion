@@ -61,6 +61,7 @@ class Game(Baseclass):
         self.screenflash = ScreenFlash(self)
         self.all_sprites.add(self.screenflash)
         self.life = Life(self)
+        self.coins = 20
         self.shop = ShopUI(self)
         
 
@@ -103,6 +104,7 @@ class Game(Baseclass):
         self.bullets = pg.sprite.Group()
     
     def events(self):
+        self.shop.coins_text.msg = "Coins: %d"%self.coins
         self.life.update()
         mx,my = pg.mouse.get_pos()
         
@@ -195,10 +197,14 @@ class Game(Baseclass):
             for icon in self.shop.turret_icons:
                 if icon.rect.collidepoint(self.mx,self.my):
                     self.shop.selected_turret = icon.value
+                    self.shop.selected_turret_cost = TURRETCOSTS[self.shop.selected_turret]
 
             for base in self.bases:
                 if base.rect.collidepoint(self.mx,self.my):
                     if base.turret_val == -1:
+                        if self.coins < self.shop.selected_turret_cost:
+                            return
+                        self.coins -= self.shop.selected_turret_cost
                         base.turret_val = self.shop.selected_turret
                         base.turret = TURRETCLASSES[self.shop.selected_turret](self.shop.selected_turret,base.rect.x,base.rect.y,self,base)
                         self.all_sprites.add(base.turret)

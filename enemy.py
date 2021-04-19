@@ -41,6 +41,7 @@ class Enemy(pg.sprite.Sprite):
         self.animation_frame = 0
         self.action = 0
         self.animation_framerate = 5
+        self.dropchance = 20
 
         self.speed = speed 
 
@@ -159,6 +160,10 @@ class Enemy(pg.sprite.Sprite):
             #self.kill()
             self.isActive = False
             self.action = 2
+            for x in range(5):
+                self.rand = rd.randint(1,100)
+                if self.rand <= self.dropchance:
+                    self.game.coins += 1
             self.game.score += SLIMESCORES[self.type]
             self.game.score_text.msg = "Score : %d"%self.game.score
            
@@ -188,7 +193,7 @@ class BlueSlime(Enemy):
         super().__init__('Images/slime1.png',x,y,game,1,lane)
 
         self.hp = BLUESLIMEHEALTH
-
+        self.dropchance = 30
         self.type = 1
 
 
