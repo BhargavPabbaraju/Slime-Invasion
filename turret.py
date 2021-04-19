@@ -1,6 +1,7 @@
 from settings import *
 from utility import *
 from bullet import *
+from text import *
 
 
 class Turret(pg.sprite.Sprite):
@@ -12,6 +13,7 @@ class Turret(pg.sprite.Sprite):
         self.c = c -1
         self.x = self.r
         self.y = self.c
+        self.cost = 10
         self.game = game
         self.last_time = pg.time.get_ticks()
         self.ammo = 5
@@ -107,6 +109,9 @@ class ShopUI(pg.sprite.Sprite):
         self.rect.x = WIDTH - self.image.get_width()
         self.rect.y = 0
         self.selected_turret = 0
+        self.selected_turret_cost = 0
+        self.coins_text = Text(self.rect.x + 20,self.rect.y + 500,"Coins: %d"%self.game.coins,self,16)
+        self.game.all_sprites.add(self.coins_text)
 
         for x in range(len(self.game.available_turrets)):
             self.icon = pg.sprite.Sprite(self.game.all_sprites)
@@ -152,6 +157,7 @@ class TripleCrossbowTurret(Turret):
         super().__init__(type,r,c,game,base)
         self.sheet = Spritesheet('Images/TripleCrossbowSheet.png')
         self.animation_framerate = 15
+        self.cost = 15
         
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
 
@@ -177,5 +183,10 @@ TURRETCLASSES = {
 TURRETIMAGES = {
     0 : pg.image.load('Images/CrossbowIcon.png'),
     1 : pg.image.load('Images/TripleCrossbowIcon.png')
+}
+
+TURRETCOSTS = {
+    0 : 10,
+    1 : 15
 }
 
