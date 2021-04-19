@@ -117,6 +117,7 @@ class Map(pg.sprite.Sprite):
         self.game.all_sprites.add(self.fturret)
         self.game.turrets.add(self.fturret)
         self.game.current_turret = self.fturret
+        self.game.all_sprites.add(self.fturret.ammobar)
         self.game.turret_index = 0
 
 

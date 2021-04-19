@@ -200,6 +200,7 @@ class Game(Baseclass):
                         base.turret = TURRETCLASSES[self.shop.selected_turret](self.shop.selected_turret,base.rect.x,base.rect.y,self,base)
                         self.all_sprites.add(base.turret)
                         self.turrets.add(base.turret)
+                        self.all_sprites.add(base.turret.ammobar)
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
     
