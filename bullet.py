@@ -29,9 +29,12 @@ class Arrow(Bullet):
         self.rect.center =x,y
         self.last_update = 300
 
+        self.formVel()
+        self.rect.center = vec(self.rect.x,self.rect.y)
+
+    def formVel(self):
         self.v = vec()
         self.v.from_polar((self.speed,-self.angle))
-        self.rect.center = vec(self.rect.x,self.rect.y)
 
     def setImage(self):
         self.image = pg.transform.rotate(self.image,self.angle)

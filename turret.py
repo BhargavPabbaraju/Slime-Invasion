@@ -146,6 +146,8 @@ class TripleCrossbowTurret(Turret):
             self.arrow = Arrow(*self.rect.center,self.angle - 7 + 7*x,0)
             self.arrow.image = pg.image.load('Images/arrow2.png')
             self.arrow.setImage()
+            self.arrow.speed = 12
+            self.arrow.formVel()
             self.arrow.damage = TRIPLECROSSBOWDAMAGE
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
