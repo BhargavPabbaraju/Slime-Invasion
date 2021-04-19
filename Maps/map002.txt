@@ -28,4 +28,7 @@ g g d d d d d d d d g g g g g d d d d d d d d d g g g g g g
 0 1 25
 0 15 1
 0 1 15
+#ENEMY SPAWN POSITIONS x y
+0 362
+561 512
 

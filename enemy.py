@@ -51,11 +51,16 @@ class Enemy(pg.sprite.Sprite):
         self.vel2.from_polar((self.speed,-90))
 
         self.rect.topleft = vec(self.x,self.y)
+        
 
     def imagify(self):
         self.image = self.sheet.scale(self.index*32,0*32,32,32,self.color,1)
         self.rect = self.image.get_rect()
         self.rect.topleft = vec(self.x,self.y)
+        self.hitrect = self.rect.copy()
+        self.hitrect.height = 20
+        
+        
     
 
     def move(self):
@@ -155,6 +160,13 @@ class Enemy(pg.sprite.Sprite):
             self.isActive = False
             self.action = 2
         self.last_update = pg.time.get_ticks()
+
+        self.hitrect = self.rect.copy()
+        self.hitrect.height = 20
+        self.hitrect.bottom = self.rect.bottom
+
+        #self.hitrect.center = self.rect.center
+        #pg.draw.rect(self.image,(255,0,0),[0,0,32,20],width=2)
 
 
 class GreenSlime(Enemy):
