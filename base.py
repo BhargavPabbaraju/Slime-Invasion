@@ -177,7 +177,7 @@ class Game(Baseclass):
             self.current_turret.active = True
         
         if key == pg.K_SPACE:
-            self.gameover()
+            self.pausegame()
 
     def mouseevents(self,button,action):
         if action == pg.MOUSEBUTTONDOWN and button == 1:
@@ -222,6 +222,12 @@ class Game(Baseclass):
                 for hit in hits:
                     if(enemy.isActive):
                         enemy.hp -= hit.damage
+    
+
+    def pausegame(self):
+        self.menu.pausemenu = PauseMenu(self,self.menu)
+        self.menu.pausemenu.screen2 = disp.copy()
+        self.menu.game_state = 2
 
     def gameover(self):
         self.menu.gameovermenu = GameoverMenu(self,self.menu)
@@ -229,6 +235,71 @@ class Game(Baseclass):
         self.menu.game_state = 3
 
 
+
+
+class PauseMenu(Baseclass):
+    def __init__(self,game,menu):
+        super().__init__()
+        
+        self.game = game
+        self.texts = pg.sprite.Group()
+        txts = ["Paused".center(10),"Continue","Quit".center(10)]
+
+        txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , (HEIGHT-txt.rect.height*1.5)//2
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        
+        txt = Text(0,0,"Press any key to continue",self.game,22,0,WHITE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , (HEIGHT+txt.rect.height*3)//2
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        
+        txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[1],self.game,32,3,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 -200, GAMEOVERTEXTPOSITIONS[3][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[2],self.game,32,4,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 +200, GAMEOVERTEXTPOSITIONS[4][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+        self.menu = menu
+
+        
+        
+        
+        self.screen = disp
+        
+
+
+    def draw(self):
+        
+        self.screen.fill(-1)
+        self.screen.blit(self.screen2,(0,0))
+        self.all_sprites.update()
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
+        self.clock.tick(60)
+
+
+    
+    def events(self):
+        mouse = pg.mouse.get_pos()
+        for txt in self.texts:
+            if txt.rect.collidepoint(mouse):
+                if txt.button==1:
+                    txt.active = True
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    if txt.ind == 3: #Continue
+                        self.menu.game_state = 1
+                    elif txt.ind == 4: #QUIT:
+                        pg.quit()
+                        quit()
+
+            else:
+                txt.active = False
         
 
 
@@ -238,23 +309,26 @@ class GameoverMenu(Baseclass):
         
         self.game = game
         self.texts = pg.sprite.Group()
-        txts = ["Game Over","Waves Cleared : %d"%(self.game.wave-1),"Highscore : %d"%self.game.score,"Play Again","Quit"]
-        txts2 = []
-        txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]
-        txts2.append(txt)
-        txt = Text(*GAMEOVERTEXTPOSITIONS[1],txts[1],self.game,32,0,BLUE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[1][1]
-        txts2.append(txt)
-        txt = Text(*GAMEOVERTEXTPOSITIONS[2],txts[2],self.game,32,0,BLUE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[2][1]
-        txts2.append(txt)
-
-
-        for txt in txts2:
+        txts = ["Game Over","Waves Cleared : %d"%(self.game.wave-1),"Highscore : %d"%self.game.score,"Play Again","Quit".center(10)]
+        for i in range(3):
+            s=32 if i else 72
+            txt = Text(*GAMEOVERTEXTPOSITIONS[i],txts[i],self.game,s,i,BLUE,2)
+            txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[i][1]
             self.texts.add(txt)
             self.all_sprites.add(txt)
         
+
+        txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[3],self.game,s,3,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 -200, GAMEOVERTEXTPOSITIONS[3][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[4],self.game,s,4,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 +200, GAMEOVERTEXTPOSITIONS[4][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+
+        self.menu = menu
         
         
         self.screen = disp
@@ -301,6 +375,9 @@ class Main(Baseclass):
                 if event.type == pg.KEYDOWN:
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
+                    elif self.game_state ==2:
+                        self.game_state = 1
+                
                         
                     
                     
@@ -318,6 +395,10 @@ class Main(Baseclass):
                 #game
                 self.game.events()
                 self.game.draw()
+            
+            elif self.game_state == 2:
+                self.pausemenu.events()
+                self.pausemenu.draw()
             
             elif self.game_state == 3:
                 self.gameovermenu.events()

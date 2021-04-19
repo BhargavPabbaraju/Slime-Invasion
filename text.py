@@ -10,8 +10,10 @@ class Text(pg.sprite.Sprite):
         self.pos = x,y
         self.size = size
         self.color = color
+        self.origcolor = color
         self.active = False
         
+        self.darker = GRAY
         self.button = button
 
         if self.button:
@@ -25,6 +27,12 @@ class Text(pg.sprite.Sprite):
 
     def update(self):
         
+        if self.active:
+            self.color = self.darker
+        else:
+            self.color = self.origcolor
+
+
         self.font = pg.font.Font(FONT,self.size)
         self.image = self.font.render(self.msg,True,self.color)
         self.rect = self.image.get_rect()
@@ -38,5 +46,6 @@ class Text(pg.sprite.Sprite):
             self.rect = self.image.get_rect()
         
         self.rect.topleft = self.pos
+
         
         
