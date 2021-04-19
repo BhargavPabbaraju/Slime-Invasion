@@ -154,6 +154,7 @@ class ScreenFlash(pg.sprite.Sprite):
     
     def update(self):
 
+        #print(pg.time.get_ticks(),self.game.last_switched,self.game.menu.game_state)
         self.new_alpha = 255 * (pg.time.get_ticks() - self.game.last_switched)/15000
         self.image.set_alpha(Lerp(self.image.get_alpha(),self.new_alpha,deltaTime(self.last_time)))
         self.last_time = pg.time.get_ticks()

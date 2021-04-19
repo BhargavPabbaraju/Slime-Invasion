@@ -90,7 +90,7 @@ class Game(Baseclass):
         self.score = 0
         self.score_text = Text(*SCORETEXTPOSITION,"Score : %d"%self.score,self,32)
         self.all_sprites.add(self.score_text)
-    
+        self.last_paused = pg.time.get_ticks()
 
     def init_groups(self):
         '''Initialize all sprite groups'''
@@ -210,6 +210,7 @@ class Game(Baseclass):
                         self.all_sprites.add(base.turret)
                         self.turrets.add(base.turret)
                         self.all_sprites.add(base.turret.ammobar)
+
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
     
@@ -234,11 +235,26 @@ class Game(Baseclass):
         self.menu.pausemenu = PauseMenu(self,self.menu)
         self.menu.pausemenu.screen2 = disp.copy()
         self.menu.game_state = 2
+        now = pg.time.get_ticks()
+        self.last_paused = now 
 
     def gameover(self):
         self.menu.gameovermenu = GameoverMenu(self,self.menu)
         self.menu.gameovermenu.screen2 = disp.copy()
         self.menu.game_state = 3
+    
+    def unpause(self):
+        now = pg.time.get_ticks()
+
+        diff = now - self.last_paused
+        
+        sl = self.last_switched
+        self.last_update = diff + self.last_update
+        self.last_switched = diff +self.last_switched
+
+        #print(sl,now,self.last_switched,"unpause",self.last_paused,now-self.last_paused)
+
+        
 
 
 
@@ -298,8 +314,11 @@ class PauseMenu(Baseclass):
                     txt.active = True
                 clicks = pg.mouse.get_pressed()
                 if clicks[0]:
+
                     if txt.ind == 3: #Continue
                         self.menu.game_state = 1
+                        self.game.unpause()
+
                     elif txt.ind == 4: #QUIT:
                         pg.quit()
                         quit()
@@ -353,7 +372,25 @@ class GameoverMenu(Baseclass):
 
     
     def events(self):
-        pass
+        mouse = pg.mouse.get_pos()
+        for txt in self.texts:
+            if txt.rect.collidepoint(mouse):
+                if txt.button==1:
+                    txt.active = True
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    
+                    if txt.ind == 3: #New Game
+                        self.menu.game = Game(self.menu)
+                        self.menu.game_state = 1
+
+                    elif txt.ind == 4: #QUIT:
+                        pg.quit()
+                        quit()
+
+            else:
+                txt.active = False
+        
 
         
             
