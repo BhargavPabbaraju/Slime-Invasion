@@ -236,11 +236,16 @@ class GameoverMenu(Baseclass):
         self.game = game
         self.texts = pg.sprite.Group()
         txts = ["Game Over","Waves Cleared : %d"%self.game.wave,"Highscore : %d"%self.game.score,"Play Again","Quit"]
-        for i in range(len(txts)):
-            size = 72 if i==0 else 32 if i<3 else 42
+        txts2 = []
+        txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]
+        txts2.append(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[1],txts[1],self.game,32,0,BLUE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[1][1]
+        txts2.append(txt)
 
-            txt = Text(*GAMEOVERTEXTPOSITIONS[i],txts[i],self.game,size,i,BLACK)
-            
+
+        for txt in txts2:
             self.texts.add(txt)
             self.all_sprites.add(txt)
         
@@ -290,6 +295,9 @@ class Main(Baseclass):
                 if event.type == pg.KEYDOWN:
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
+                        self.game.gameover()
+                    
+                    
 
                 if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
                     self.game.mouseevents(event.button,event.type)
