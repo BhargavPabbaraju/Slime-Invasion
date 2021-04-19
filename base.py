@@ -175,6 +175,9 @@ class Game(Baseclass):
             self.turret_index = (self.turret_index+1)%len(self.turrets)
             self.current_turret = self.turrets.sprites()[self.turret_index]
             self.current_turret.active = True
+        
+        if key == pg.K_SPACE:
+            self.gameover()
 
     def mouseevents(self,button,action):
         if action == pg.MOUSEBUTTONDOWN and button == 1:
@@ -243,6 +246,9 @@ class GameoverMenu(Baseclass):
         txt = Text(*GAMEOVERTEXTPOSITIONS[1],txts[1],self.game,32,0,BLUE,2)
         txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[1][1]
         txts2.append(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[2],txts[2],self.game,32,0,BLUE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[2][1]
+        txts2.append(txt)
 
 
         for txt in txts2:
@@ -295,7 +301,7 @@ class Main(Baseclass):
                 if event.type == pg.KEYDOWN:
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
-                        self.game.gameover()
+                        
                     
                     
 
