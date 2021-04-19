@@ -57,12 +57,16 @@ class Game(Baseclass):
         super().__init__()
 
         self.mapid = 1        
+        self.available_turrets = []
+
 
         self.map = Map(self)
 
         self.screenflash = ScreenFlash(self)
         self.all_sprites.add(self.screenflash)
         self.life = Life(self)
+        self.shop = ShopUI()
+        self.all_sprites.add(self.shop)
         
 
         self.screen = disp

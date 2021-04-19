@@ -23,6 +23,14 @@ class Turret(pg.sprite.Sprite):
 
         self.active = False
 
+class ShopUI(pg.sprite.Sprite):
+    def __init__(self):
+        super().__init__()
+        self.image = pg.image.load('Images/shopUI_bg.png')
+        self.rect = self.image.get_rect()
+        self.rect.x = WIDTH - self.image.get_width()
+        self.rect.y = 0
+
 class Base(pg.sprite.Sprite):
     def __init__(self):
         super().__init__()
