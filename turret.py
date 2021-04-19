@@ -57,6 +57,8 @@ class Turret(pg.sprite.Sprite):
 
         if self.action != 1:
             self.ammo += 0.5 * deltaTime(self.last_time)
+            if self.ammo > self.max_ammo:
+                self.ammo = self.max_ammo
         self.animation_frame += deltaTime(self.last_time) * self.animation_framerate
         if int(self.animation_frame) >= len(self.animation_database[self.action]):
             self.animation_frame = 0
@@ -123,7 +125,7 @@ class AmmoBar(pg.sprite.Sprite):
         self.ammo = ammo
 
     def update(self):
-        self.image = pg.transform.scale(self.imagesource,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
+        self.image = pg.transform.scale(self.imagesource,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
 
 class CrossbowTurret(Turret):
     def __init__(self,type,r,c,game):
@@ -133,15 +135,18 @@ class TripleCrossbowTurret(Turret):
     def __init__(self,type,r,c,game):
         super().__init__(type,r,c,game)
         self.sheet = Spritesheet('Images/TripleCrossbowSheet.png')
+        self.animation_framerate = 15
         
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
 
     def shoot(self):
         self.shot = True
-        self.ammo -= 1
+        self.ammo -= 3
         for x in range(3):
-            self.arrow = Arrow(*self.rect.center,self.angle - 5 + 5*x,0)
-            self.arrow.damage = CROSSBOWDAMAGE
+            self.arrow = Arrow(*self.rect.center,self.angle - 7 + 7*x,0)
+            self.arrow.image = pg.image.load('Images/arrow2.png')
+            self.arrow.setImage()
+            self.arrow.damage = TRIPLECROSSBOWDAMAGE
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
             self.arrow.rect.center = self.rect.center

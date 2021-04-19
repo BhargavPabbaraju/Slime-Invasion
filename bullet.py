@@ -23,8 +23,7 @@ class Arrow(Bullet):
         self.angle = angle + self.deviation
 
         self.image = pg.image.load('Images/arrow.png')
-        self.image = pg.transform.rotate(self.image,self.angle)
-        self.image = pg.transform.scale(self.image,(int(self.image.get_width()*1.25),int(self.image.get_height()*1.25)))
+        self.setImage()
         self.rect = self.image.get_rect()
     
         self.rect.center =x,y
@@ -33,6 +32,10 @@ class Arrow(Bullet):
         self.v = vec()
         self.v.from_polar((self.speed,-self.angle))
         self.rect.center = vec(self.rect.x,self.rect.y)
+
+    def setImage(self):
+        self.image = pg.transform.rotate(self.image,self.angle)
+        self.image = pg.transform.scale(self.image,(int(self.image.get_width()*1.25),int(self.image.get_height()*1.25)))
 
     def update(self):
         if not self.active:
