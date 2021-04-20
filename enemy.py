@@ -55,6 +55,9 @@ class Enemy(pg.sprite.Sprite):
 
         self.rect.topleft = vec(self.x,self.y)
         self.apparantPos = vec(self.apparantX,self.apparantY)
+
+        self.menu_slime = False
+        self.r = rd.choice(['r','d','u','l'])
         
 
     def imagify(self):
@@ -153,11 +156,31 @@ class Enemy(pg.sprite.Sprite):
         now = pg.time.get_ticks()
 
       
+        if not self.menu_slime:
+            if now - self.last_update2 > self.update_thres2:
+                self.move()
 
-        if now - self.last_update2 > self.update_thres2:
-            self.move()
+                self.last_update2 = now
+        
+        else:
+            self.r = rd.choice(['r','d','u','l'])
 
-            self.last_update2 = now
+            if self.r =="r":
+                self.rect.topleft+=self.vel
+            elif self.r=='l':
+                self.rect.topleft-=self.vel
+            elif self.r=='d':
+                self.rect.topleft-=self.vel2
+            else:
+                self.rect.topleft+=self.vel2
+
+            if self.rect.x<=0 or self.rect.x>=WIDTH:
+                self.rect.x = WIDTH//2
+
+            
+            elif self.rect.y<=0 or self.rect.y>=HEIGHT:
+                self.rect.y = HEIGHT//2
+                
         
   
 
@@ -178,6 +201,9 @@ class Enemy(pg.sprite.Sprite):
         self.hitrect = self.rect.copy()
         self.hitrect.height = 20
         self.hitrect.bottom = self.rect.bottom
+
+        # if self.menus_slime:
+        #     self.image = pg.transform.scale(self.image,)
 
         
 

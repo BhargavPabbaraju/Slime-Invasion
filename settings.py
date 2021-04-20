@@ -10,9 +10,10 @@ from pygame.math import Vector2 as vec
 WIDTH = 960
 HEIGHT = 544
 
+TITLE = "Slimes Attack"
 
 disp = pg.display.set_mode((WIDTH,HEIGHT))
-pg.display.set_caption("Slimes Attack")
+pg.display.set_caption(TITLE)
 pg.init()
 
 CROSSBOWDAMAGE = 5
@@ -40,6 +41,7 @@ GAMEOVERTEXTPOSITIONS = [[10*30,1*32],[12*32,6*30],[12*32,8*30],[6*32,14*32],[19
 WAVETEXTPOSITION = [1*32,15*32]
 SCORETEXTPOSITION = [14*32,0*32]
 NEXTWAVEBUTTONPOSITION = [14*32,15*32-10]
+
 
 SLIMESCORES = [5,10,20,10,30,25]
 

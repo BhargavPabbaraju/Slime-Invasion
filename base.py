@@ -325,19 +325,28 @@ class MainMenu(Baseclass):
 
         txts = ["Play".center(10),"How to Play","Quit".center(10)]
 
+        self.generate_sprites()
+        
+
+        txt = Text(*GAMEOVERTEXTPOSITIONS[0],TITLE,self.game,72,1,WHITE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]+2*32
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+
         txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,32,0,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[3][1]
         self.texts.add(txt)
         self.all_sprites.add(txt)
 
         
 
         txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[3-2],self.game,32,3,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 -200, GAMEOVERTEXTPOSITIONS[3][1]
+        txt.pos = (WIDTH-txt.rect.width)//2 -300, GAMEOVERTEXTPOSITIONS[3][1]
         self.texts.add(txt)
         self.all_sprites.add(txt)
         txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[4-2],self.game,32,4,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 +200, GAMEOVERTEXTPOSITIONS[4][1]
+        txt.pos = (WIDTH-txt.rect.width)//2 +300, GAMEOVERTEXTPOSITIONS[4][1]
         self.texts.add(txt)
         self.all_sprites.add(txt)
 
@@ -346,8 +355,26 @@ class MainMenu(Baseclass):
         
         
         self.screen = disp
+
+        
+    
+    def generate_sprites(self):
+        for i in range(30):
+            typ = rd.choice([0,1,2,3,4,5])
+            x=rd.randint(1,29)*32
+            y = rd.randint(1,14)*32
+            sli =ENEMYCLASSES[typ](x,y,self.game,0)
+            sli.menu_slime = True
+            self.all_sprites.add(sli)
+
+
+    
+
+ 
+        
     
     def events(self):
+        #self.update()
         mouse = pg.mouse.get_pos()
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
@@ -506,7 +533,7 @@ class GameoverMenu(Baseclass):
                 txt.active = False
         
 
-        
+
             
                         
 
@@ -522,6 +549,7 @@ class Main(Baseclass):
         #1 == Game
         #2 == PauseMenu
         #3 == GameoverMenu
+        #4 == 
 
 
     def loop(self):
