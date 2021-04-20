@@ -61,6 +61,9 @@ class Game(Baseclass):
         self.screenflash = ScreenFlash(self)
         self.all_sprites.add(self.screenflash)
         self.life = Life(self)
+
+        self.waiting = False
+
         self.coins = 20
         self.shop = ShopUI(self)
         
@@ -93,7 +96,7 @@ class Game(Baseclass):
 
         self.last_paused = pg.time.get_ticks()
 
-        self.waiting = False
+        
 
         self.next_wave_button = Text(*NEXTWAVEBUTTONPOSITION,"Start Next Wave",self,32,-1,WHITE,button=1)
         self.next_wave_button.pos = (WIDTH-self.next_wave_button.rect.width)//2 , NEXTWAVEBUTTONPOSITION[1]
@@ -109,10 +112,11 @@ class Game(Baseclass):
         self.bases = pg.sprite.Group()
         self.turrets = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
-        #self.antienemies = pg.sprite.Group()
+        self.shop_sprites = pg.sprite.Group()
         self.bullets = pg.sprite.Group()
     
     def events(self):
+        
         self.shop.coins_text.msg = "Coins: %d"%self.coins
         self.life.update()
         mx,my = pg.mouse.get_pos()
@@ -153,9 +157,19 @@ class Game(Baseclass):
         self.wave_delay = self.wave * DELAYMULTIPLIER
         self.wave_text.msg = "Wave : %d"%self.wave
         self.waiting = False
+        self.shop_hide()
 
         self.last_switched = now
         self.last_update = now
+
+    def shop_hide(self):
+        for sprite in self.shop_sprites:
+            sprite.hidden = True
+    
+    def shop_unhide(self):
+        for sprite in self.shop_sprites:
+            sprite.hidden = False
+
 
     
 
@@ -189,8 +203,10 @@ class Game(Baseclass):
 
         if len(self.enemies)==0:
             self.waiting = True
+            self.shop_unhide()
         else:
             self.waiting = False
+            self.shop_hide()
 
 
         
@@ -218,32 +234,34 @@ class Game(Baseclass):
 
         if action == pg.MOUSEBUTTONDOWN and button == 1:
             mx,my = pg.mouse.get_pos()
-            for turret in self.turrets:
-                if turret.rect.collidepoint(mx,my):
-                    self.current_turret.active = False
-                    self.current_turret.action = 0
-                    self.current_turret.animation_frame = 0
-                    self.current_turret = turret
-                    self.current_turret.active = True
-            self.current_turret.toggle_shoot(True)
+            if not self.waiting:
+                for turret in self.turrets:
+                    if turret.rect.collidepoint(mx,my):
+                        self.current_turret.active = False
+                        self.current_turret.action = 0
+                        self.current_turret.animation_frame = 0
+                        self.current_turret = turret
+                        self.current_turret.active = True
+                self.current_turret.toggle_shoot(True)
 
             self.mx,self.my = pg.mouse.get_pos()
-            for icon in self.shop.turret_icons:
-                if icon.rect.collidepoint(self.mx,self.my):
-                    self.shop.selected_turret = icon.value
-                    self.shop.selected_turret_cost = TURRETCOSTS[self.shop.selected_turret]
+            if self.waiting:
+                for icon in self.shop.turret_icons:
+                    if icon.rect.collidepoint(self.mx,self.my):
+                        self.shop.selected_turret = icon.value
+                        self.shop.selected_turret_cost = TURRETCOSTS[self.shop.selected_turret]
 
-            for base in self.bases:
-                if base.rect.collidepoint(self.mx,self.my):
-                    if base.turret_val == -1:
-                        if self.coins < self.shop.selected_turret_cost:
-                            return
-                        self.coins -= self.shop.selected_turret_cost
-                        base.turret_val = self.shop.selected_turret
-                        base.turret = TURRETCLASSES[self.shop.selected_turret](self.shop.selected_turret,base.rect.x,base.rect.y,self,base)
-                        self.all_sprites.add(base.turret)
-                        self.turrets.add(base.turret)
-                        self.all_sprites.add(base.turret.ammobar)
+                for base in self.bases:
+                    if base.rect.collidepoint(self.mx,self.my):
+                        if base.turret_val == -1:
+                            if self.coins < self.shop.selected_turret_cost:
+                                return
+                            self.coins -= self.shop.selected_turret_cost
+                            base.turret_val = self.shop.selected_turret
+                            base.turret = TURRETCLASSES[self.shop.selected_turret](self.shop.selected_turret,base.rect.x,base.rect.y,self,base)
+                            self.all_sprites.add(base.turret)
+                            self.turrets.add(base.turret)
+                            self.all_sprites.add(base.turret.ammobar)
 
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)

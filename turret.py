@@ -103,26 +103,81 @@ class ShopUI(pg.sprite.Sprite):
         super().__init__()
         self.game = game
         self.turret_icons = pg.sprite.Group()
-        game.all_sprites.add(self)
-        self.image = pg.image.load('Images/shopUI_bg.png')
+        self.game.all_sprites.add(self)
+        self.game.shop_sprites.add(self)
+        self.sheet = pg.image.load('Images/shopUI_bg.png')
+        self.imagify()
+        self.selected_turret = 0
+        self.selected_turret_cost = 0
+        self.coins_text = Text(self.rect.x + 20,self.rect.y + 500,"Coins: %d"%self.game.coins,self.game,16,-2,GOLD)
+        self.game.all_sprites.add(self.coins_text)
+        self.hidden= True
+
+        for x in range(len(self.game.available_turrets)):
+            self.icon = Icon(self.game,x,self.rect.x,self.rect.y)
+            self.turret_icons.add(self.icon)
+            self.game.all_sprites.add(self.icon)
+            self.game.shop_sprites.add(self.icon)
+            self.icon.cost_text = Text(self.icon.rect.x + 20,self.icon.rect.y + 80,"Cost: %d"%TURRETCOSTS[x],self.game,16,-2,GOLD)
+            self.game.all_sprites.add(self.icon.cost_text)
+            self.game.shop_sprites.add(self.icon.cost_text)
+        
+    
+    def imagify(self):
+        self.image = self.sheet
         self.rect = self.image.get_rect()
         self.rect.x = WIDTH - self.image.get_width()
         self.rect.y = 0
-        self.selected_turret = 0
-        self.selected_turret_cost = 0
-        self.coins_text = Text(self.rect.x + 20,self.rect.y + 500,"Coins: %d"%self.game.coins,self,16)
-        self.game.all_sprites.add(self.coins_text)
 
-        for x in range(len(self.game.available_turrets)):
-            self.icon = pg.sprite.Sprite(self.game.all_sprites)
-            self.icon.image = pg.transform.scale(TURRETIMAGES[self.game.available_turrets[x]],(90,80))
-            self.icon.rect = self.icon.image.get_rect()
-            self.icon.rect.x = self.rect.x
-            self.icon.rect.y = self.rect.y + 100*x
-            self.icon.value = self.game.available_turrets[x]
-            self.turret_icons.add(self.icon)
-            self.icon.cost_text = Text(self.icon.rect.x + 20,self.icon.rect.y + 80,"Cost: %d"%TURRETCOSTS[x],self.game,16)
-            self.game.all_sprites.add(self.icon.cost_text)
+    def hide(self):
+        self.image.set_alpha(0)
+        #self.image.set_colorkey((234,2,23))
+    
+    def unhide(self):
+        self.image.set_alpha(255)
+        self.imagify()
+
+    
+    def update(self):
+        if self.hidden:
+            self.hide()
+        
+        else:
+            self.unhide()
+
+
+class Icon(pg.sprite.Sprite):
+    def __init__(self,game,x,rx,ry):
+        super().__init__()
+        self.game = game
+        self.x = rx
+        self.y = ry
+        self.ind = x
+        self.imagify()
+        self.value = self.game.available_turrets[self.ind]
+        self.hidden= True
+    
+    def imagify(self):
+        self.image = pg.transform.scale(TURRETIMAGES[self.game.available_turrets[self.ind]],(90,80))
+        self.rect = self.image.get_rect()
+        self.rect.x = self.x
+        self.rect.y = self.y + 100*self.ind
+
+    def hide(self):
+        self.image.fill((255,35,22))
+        self.image.set_colorkey((255,35,22))
+    
+    def unhide(self):
+        self.imagify()
+    
+    def update(self):
+        if self.hidden:
+            self.hide()
+        
+        else:
+            self.unhide()
+
+
 
 class Base(pg.sprite.Sprite):
     def __init__(self,x,y):
