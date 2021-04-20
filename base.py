@@ -154,6 +154,9 @@ class Game(Baseclass):
         self.wave_text.msg = "Wave : %d"%self.wave
         self.waiting = False
 
+        self.last_switched = now
+        self.last_update = now
+
     
 
     def spawn_enemies(self):
@@ -176,7 +179,7 @@ class Game(Baseclass):
         
 
         if not self.stop_spawning:
-            typ = rd.choice([0,1])
+            typ = rd.choice([0,1,2,3,4,5])
             lane = rd.choice([0,1])
             en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
             self.all_sprites.add(en)
@@ -286,6 +289,59 @@ class Game(Baseclass):
         self.last_switched = diff +self.last_switched
 
         
+
+        
+class MainMenu(Baseclass):
+    def __init__(self,game,menu):
+        super().__init__()
+
+        self.game = game
+        self.texts = pg.sprite.Group()
+
+        txts = ["Play".center(10),"How to Play","Quit".center(10)]
+
+        txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,32,0,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+        
+
+        txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[3-2],self.game,32,3,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 -200, GAMEOVERTEXTPOSITIONS[3][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[4-2],self.game,32,4,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 +200, GAMEOVERTEXTPOSITIONS[4][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+
+        self.menu = menu
+        
+        
+        self.screen = disp
+    
+    def events(self):
+        mouse = pg.mouse.get_pos()
+        for txt in self.texts:
+            if txt.rect.collidepoint(mouse):
+                if txt.button==1:
+                    txt.active = True
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    
+                    if txt.ind == 0: #New Game
+                        self.menu.game = Game(self.menu)
+                        self.menu.game_state = 1
+
+                    elif txt.ind == 4: #QUIT:
+                        pg.quit()
+                        quit()
+
+            else:
+                txt.active = False
+    
 
         
 
@@ -433,13 +489,15 @@ class GameoverMenu(Baseclass):
 class Main(Baseclass):
     def __init__(self):
         super().__init__()
-        self.game_state = 1
+        self.game_state = 0
         self.game = Game(self)
+        self.mainmenu = MainMenu(self.game,self)
         
         #0 == InitialMenu
         #1 == Game
         #2 == PauseMenu
         #3 == GameoverMenu
+
 
     def loop(self):
         while not self.exit:
@@ -454,8 +512,10 @@ class Main(Baseclass):
                     elif self.game_state ==2:
                         self.game_state = 1
                         self.game.unpause()
-                
-                        
+                    elif self.game_state == 0:
+                        self.game_state = 1
+                        self.game.unpause()
+                    
                     
                     
 
@@ -465,8 +525,8 @@ class Main(Baseclass):
 
             if self.game_state == 0:
                 #menu
-                self.menu.events()
-                self.menu.draw()
+                self.mainmenu.events()
+                self.mainmenu.draw()
 
             elif self.game_state ==1:
                 #game

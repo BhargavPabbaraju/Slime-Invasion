@@ -148,6 +148,8 @@ class AmmoBar(pg.sprite.Sprite):
         self.ammo = ammo
 
     def update(self):
+        if self.ammo<0:
+            self.ammo = 0
         self.image = pg.transform.scale(self.imagesource,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
         self.image = pg.transform.scale(self.imagesource,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
 
@@ -194,6 +196,7 @@ class CannonTurret(Turret):
         self.game.all_sprites.add(self)
         self.game.bullets.add(self.ball)
         self.ball.rect.center = self.rect.center
+
 
 TURRETCLASSES = {
     0 : CrossbowTurret,

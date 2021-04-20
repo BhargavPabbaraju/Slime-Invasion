@@ -197,10 +197,49 @@ class BlueSlime(Enemy):
         self.type = 1
 
 
+class PinkSlime(Enemy):
 
+    def __init__(self,x,y,game,lane):
+        super().__init__('Images/slime2.png',x,y,game,1,lane)
+
+        self.hp = PINKSLIMEHEALTH
+        self.dropchance = 40
+        self.type = 2
+
+
+class OrangeSlime(Enemy):
+
+    def __init__(self,x,y,game,lane):
+        super().__init__('Images/slime3.png',x,y,game,1.5,lane)
+
+        self.hp = PINKSLIMEHEALTH
+        self.dropchance =   10
+        self.type = 3
+
+class YellowSlime(Enemy):
+
+     def __init__(self,x,y,game,lane):
+        super().__init__('Images/slime4.png',x,y,game,0.5,lane)
+
+        self.hp = PINKSLIMEHEALTH
+        self.dropchance =   60
+        self.type = 4
+
+class TealSlime(Enemy):
+
+     def __init__(self,x,y,game,lane):
+        super().__init__('Images/slime5.png',x,y,game,0.5,lane)
+
+        self.hp = PINKSLIMEHEALTH
+        self.dropchance =   50
+        self.type = 5
 
 
 ENEMYCLASSES = {
     0 : GreenSlime,
-    1 : BlueSlime
+    1 : BlueSlime,
+    2 : PinkSlime,
+    3 : OrangeSlime,
+    4 : YellowSlime,
+    5 : TealSlime
 }
