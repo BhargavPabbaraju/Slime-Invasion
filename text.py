@@ -12,6 +12,7 @@ class Text(pg.sprite.Sprite):
         self.color = color
         self.origcolor = color
         self.active = False
+        self.hidden= True
         
         self.darker = GRAY
         self.button = button
@@ -55,7 +56,7 @@ class Text(pg.sprite.Sprite):
         
         self.rect.topleft = self.pos
 
-        if self.ind ==-1 and not self.game.waiting:
+        if self.ind<0 and not self.game.waiting:
             self.hide()
         
     

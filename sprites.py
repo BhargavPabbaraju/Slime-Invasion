@@ -6,6 +6,7 @@ from settings import *
 from life import *
 from text import *
 
+
 class Tile(pg.sprite.Sprite):
     def __init__(self,type,row,column,game):
         super().__init__()
