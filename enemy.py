@@ -68,6 +68,7 @@ class Enemy(pg.sprite.Sprite):
     
 
     def move(self):
+        self.apparantPos = vec(*self.rect.topleft)
         if self.rect.x < self.target[0]:
             self.apparantPos += self.vel
         elif self.rect.x > self.target[0]:
@@ -78,6 +79,7 @@ class Enemy(pg.sprite.Sprite):
             self.apparantPos -= self.vel2
 
         if self.rect.y >= self.target[1] - 5 and self.rect.y <= self.target[1] + 5 and self.rect.x >= self.target[0] - 5 and self.rect.x <= self.target[0] + 5:
+        #if self.rect.y == self.target[1] and self.rect.x == self.target[0]:
             if self.waypoint_index+1 < len(self.waypoints):
                 self.waypoint_index += 1
                 self.target = self.waypoints[self.waypoint_index]
