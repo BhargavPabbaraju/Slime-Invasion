@@ -10,6 +10,7 @@ class Enemy(pg.sprite.Sprite):
 
         self.game = game
         self.lane = lane
+        self.alternate = True
 
         self.sheet = Spritesheet(file)
 
@@ -65,14 +66,18 @@ class Enemy(pg.sprite.Sprite):
     
 
     def move(self):
+        if not self.alternate:
+            self.alternate = True
+            return
+        self.alternate = False
         if self.rect.x < self.target[0]:
-            self.rect.topleft += self.vel
+            self.rect.topleft += self.vel.normalize() * self.speed * 2
         elif self.rect.x > self.target[0]:
-            self.rect.topleft -= self.vel
+            self.rect.topleft -= self.vel.normalize() * self.speed * 2
         elif self.rect.y > self.target[1]:
-            self.rect.topleft += self.vel2
+            self.rect.topleft += self.vel2.normalize() * self.speed * 2
         elif self.rect.y < self.target[1]:
-            self.rect.topleft -= self.vel2
+            self.rect.topleft -= self.vel2.normalize() * self.speed * 2
 
         if self.rect.y == self.target[1] and self.rect.x == self.target[0]:
             if self.waypoint_index+1 < len(self.waypoints):
@@ -120,7 +125,7 @@ class Enemy(pg.sprite.Sprite):
         
         self.waypoints = self.game.paths[self.lane]
         self.target = self.waypoints[self.waypoint_index]
-        self.rect.topleft = self.target
+        self.rect.topleft = vec(*self.target)
 
 
 
