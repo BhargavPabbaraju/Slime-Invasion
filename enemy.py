@@ -31,6 +31,8 @@ class Enemy(pg.sprite.Sprite):
         
         self.last_update = pg.time.get_ticks()
         self.last_update2 = pg.time.get_ticks()
+        self.hitSound = sounds['SlimeHit']
+        self.hitSound.set_volume(2)
         self.update_thres = 200
         self.update_thres2 = 10
 

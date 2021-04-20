@@ -4,6 +4,7 @@ import pygame as pg
 import random as rd
 import sys
 import math
+from pygame import mixer as mx
 from pygame.math import Vector2 as vec
 
 ###SETTING VARIABLES
@@ -15,6 +16,12 @@ TITLE = "Slimes Attack"
 disp = pg.display.set_mode((WIDTH,HEIGHT))
 pg.display.set_caption(TITLE)
 pg.init()
+mx.pre_init(44100,-16,2,512)
+
+sounds = {
+    'CrossbowShoot' : mx.Sound('Sounds/crossbowsound.wav'),
+    'SlimeHit' : mx.Sound('Sounds/slimehit.ogg')
+}
 
 CROSSBOWDAMAGE = 5
 CANNONDAMAGE = 35
