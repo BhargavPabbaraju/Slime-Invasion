@@ -4,7 +4,7 @@
 ----<DONE>----3) Turret properties
 ----<DONE>----4) Collissions
 ----<HALF DONE>----5) Different Turrets and control
-6) The 10 second powerups
+----<DONE>----6) The 10 second powerups
 7) Graphics/Art
 ----<DONE>----8) Shop
 ----<DONE>----9) Enemy Waves and Score
@@ -13,5 +13,5 @@
 12) Tutorial 
 13) Sounds
 14) Polish
-15) Skill tree
+15) Maps
 
