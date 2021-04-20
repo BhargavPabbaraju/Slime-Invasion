@@ -64,7 +64,7 @@ class Game(Baseclass):
 
         self.waiting = False
 
-        self.coins = 20
+        self.coins = 30
         self.shop = ShopUI(self)
         
 
@@ -78,7 +78,7 @@ class Game(Baseclass):
         self.last_switched = pg.time.get_ticks()
 
 
-        self.wave = 1
+        self.wave = 0
         self.n = self.wave * ENEMYMULTIPLIER
         self.spawned_enemies = 0
         self.wave_delay = self.wave * DELAYMULTIPLIER
@@ -150,6 +150,9 @@ class Game(Baseclass):
         now = pg.time.get_ticks()
         self.stop_spawning = False
         self.last_wave = now
+
+        for turret in self.turrets:
+            turret.refreshAmmo()
 
         self.wave += 1
         self.n = self.wave * ENEMYMULTIPLIER
@@ -262,6 +265,10 @@ class Game(Baseclass):
                             self.all_sprites.add(base.turret)
                             self.turrets.add(base.turret)
                             self.all_sprites.add(base.turret.ammobar)
+
+        elif action == pg.MOUSEBUTTONDOWN and button == 3:
+            if self.current_turret.ammo == self.current_turret.max_ammo:
+                self.current_turret.toggleSuper()
 
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)

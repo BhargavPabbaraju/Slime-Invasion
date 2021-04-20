@@ -9,10 +9,12 @@ class Turret(pg.sprite.Sprite):
         super().__init__()
 
         self.type = type
+        self.super = False
         self.r = r -1
         self.c = c -1
         self.x = self.r
         self.y = self.c
+        self.infiniteAmmo = False
         self.game = game
         self.last_time = pg.time.get_ticks()
 
@@ -23,6 +25,7 @@ class Turret(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.recovery = 0.5
         self.base.rect.topleft = self.x,self.y
+        self.damage = 0
         self.animation_framerate = 52
         self.rect.center = self.base.rect.center
         self.shot = False
@@ -47,6 +50,10 @@ class Turret(pg.sprite.Sprite):
 
     def update(self):
         self.ammobar.set_ammo(int(self.ammo))
+        if self.super:
+            self.ammo -= (self.max_ammo/10) * deltaTime(self.last_time)
+            if self.ammo <= 0:
+                self.toggleSuper()
         if not self.active:
             self.ammo += (self.recovery*4) * deltaTime(self.last_time)
             if self.ammo > self.max_ammo:
@@ -83,11 +90,25 @@ class Turret(pg.sprite.Sprite):
             self.shoot()
         self.last_time = pg.time.get_ticks()
 
+    def refreshAmmo(self):
+        self.ammo = self.max_ammo
+
+    def toggleSuper(self):
+        if self.super == True:
+            self.animation_framerate = 52
+            self.infiniteAmmo = False
+            self.super = False
+        elif self.super == False:
+            self.animation_framerate = 90
+            self.infiniteAmmo = True
+            self.super = True
+
     def shoot(self):
         self.shot = True
-        self.ammo -= 1
+        if not self.infiniteAmmo:
+            self.ammo -= 1
         self.arrow = Arrow(*self.rect.center,self.angle,5)
-        self.arrow.damage = CROSSBOWDAMAGE
+        self.arrow.damage = self.damage
         self.game.all_sprites.add(self.arrow)
         self.game.bullets.add(self.arrow)
         self.arrow.rect.center = self.rect.center
@@ -211,20 +232,35 @@ class AmmoBar(pg.sprite.Sprite):
 class CrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):
         super().__init__(type,r,c,game,base)
+        self.damage = TRIPLECROSSBOWDAMAGE
 
 class TripleCrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):
         super().__init__(type,r,c,game,base)
         self.sheet = Spritesheet('Images/TripleCrossbowSheet.png')
         self.animation_framerate = 15
-        
+        self.damage = TRIPLECROSSBOWDAMAGE
+        self.spread = 15
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
+
+    def toggleSuper(self):
+        if self.super == True:
+            self.damage = CANNONDAMAGE
+            self.infiniteAmmo = False
+            self.spread = 15
+            self.super = False
+        elif self.super == False:
+            self.spread = 5
+            self.infiniteAmmo = True
+            self.damage = CANNONDAMAGE * 3
+            self.super = True
 
     def shoot(self):
         self.shot = True
-        self.ammo -= 3
+        if not self.infiniteAmmo:
+            self.ammo -= 3
         for x in range(3):
-            self.arrow = Bolt(self.rect.center[0],self.rect.center[1],self.angle - 7 + 7*x,0)
+            self.arrow = Bolt(self.rect.center[0],self.rect.center[1],self.angle - self.spread+ self.spread*x,0)
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
             self.arrow.rect.center = self.rect.center
@@ -235,16 +271,28 @@ class CannonTurret(Turret):
         self.sheet = Spritesheet('Images/CannonSheet.png')
         self.animation_framerate = 10
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
-        self.max_ammo = 3
+        self.max_ammo = 20
         self.ammo = self.max_ammo
         self.shootmax = 3
         self.shootmin = 1
+        self.damage = CANNONDAMAGE
         self.ammobar.maxammo = self.max_ammo
-        self.recovery = 0.1
+        self.recovery = 0.2
         
+    def toggleSuper(self):
+        if self.super == True:
+            self.damage = CANNONDAMAGE
+            self.infiniteAmmo = False
+            self.super = False
+        elif self.super == False:
+            self.infiniteAmmo = True
+            self.damage = CANNONDAMAGE * 3
+            self.super = True
+
     def shoot(self):
         self.shot = True
-        self.ammo -= 1
+        if not self.infiniteAmmo:
+            self.ammo -= 5
         self.ball = Cannonball(self.rect.center[0],self.rect.center[1],self.angle,10)
         self.game.all_sprites.remove(self)
         self.game.all_sprites.add(self.ball)
@@ -268,6 +316,6 @@ TURRETIMAGES = {
 TURRETCOSTS = {
     0 : 10,
     1 : 15,
-    2 : 15
+    2 : 20
 }
 
