@@ -30,6 +30,7 @@ class Turret(pg.sprite.Sprite):
         self.rect.center = self.base.rect.center
         self.shot = False
         self.max_ammo = 25
+        self.shootSound = sounds['CrossbowShoot']
         self.ammo = self.max_ammo
         self.ammobar = AmmoBar(self.ammo,self.game,self.rect.x,self.rect.y)
 
@@ -107,6 +108,7 @@ class Turret(pg.sprite.Sprite):
         self.shot = True
         if not self.infiniteAmmo:
             self.ammo -= 1
+        self.shootSound.play()
         self.arrow = Arrow(*self.rect.center,self.angle,5)
         self.arrow.damage = self.damage
         self.game.all_sprites.add(self.arrow)

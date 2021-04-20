@@ -289,6 +289,7 @@ class Game(Baseclass):
             if hits:
                 for hit in hits:
                     if(enemy.isActive):
+                        enemy.hitSound.play()
                         enemy.hp -= hit.damage
     
 
