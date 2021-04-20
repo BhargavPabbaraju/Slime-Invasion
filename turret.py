@@ -18,6 +18,7 @@ class Turret(pg.sprite.Sprite):
         self.game = game
         self.last_time = pg.time.get_ticks()
 
+        self.usedSuper = False
         self.base = base
         self.sheet = Spritesheet('Images/CrossbowSheet.png')
         self.image = self.sheet.scale(0,0,48,32,(0,0,0),1.25)
@@ -93,13 +94,15 @@ class Turret(pg.sprite.Sprite):
 
     def refreshAmmo(self):
         self.ammo = self.max_ammo
+        self.usedSuper = False
 
     def toggleSuper(self):
         if self.super == True:
             self.animation_framerate = 52
             self.infiniteAmmo = False
             self.super = False
-        elif self.super == False:
+        elif self.super == False and not self.usedSuper:
+            self.usedSuper = True
             self.animation_framerate = 90
             self.infiniteAmmo = True
             self.super = True
