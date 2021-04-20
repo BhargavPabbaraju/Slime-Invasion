@@ -10,7 +10,6 @@ class Enemy(pg.sprite.Sprite):
 
         self.game = game
         self.lane = lane
-        self.alternate = True
 
         self.sheet = Spritesheet(file)
 
@@ -18,6 +17,8 @@ class Enemy(pg.sprite.Sprite):
         self.index = 0
         self.x = x
         self.y = y
+        self.apparantX = self.x
+        self.apparantY = self.y
         self.waypoint_index = 0
         self.waypoints = self.game.paths[self.lane]
         self.target = self.waypoints[self.waypoint_index]
@@ -53,6 +54,7 @@ class Enemy(pg.sprite.Sprite):
         self.vel2.from_polar((self.speed,-90))
 
         self.rect.topleft = vec(self.x,self.y)
+        self.apparantPos = vec(self.apparantX,self.apparantY)
         
 
     def imagify(self):
@@ -66,20 +68,16 @@ class Enemy(pg.sprite.Sprite):
     
 
     def move(self):
-        if not self.alternate:
-            self.alternate = True
-            return
-        self.alternate = False
         if self.rect.x < self.target[0]:
-            self.rect.topleft += self.vel.normalize() * self.speed * 2
+            self.apparantPos += self.vel
         elif self.rect.x > self.target[0]:
-            self.rect.topleft -= self.vel.normalize() * self.speed * 2
+            self.apparantPos -= self.vel
         elif self.rect.y > self.target[1]:
-            self.rect.topleft += self.vel2.normalize() * self.speed * 2
+            self.apparantPos += self.vel2
         elif self.rect.y < self.target[1]:
-            self.rect.topleft -= self.vel2.normalize() * self.speed * 2
+            self.apparantPos -= self.vel2
 
-        if self.rect.y == self.target[1] and self.rect.x == self.target[0]:
+        if self.rect.y >= self.target[1] - 5 and self.rect.y <= self.target[1] + 5 and self.rect.x >= self.target[0] - 5 and self.rect.x <= self.target[0] + 5:
             if self.waypoint_index+1 < len(self.waypoints):
                 self.waypoint_index += 1
                 self.target = self.waypoints[self.waypoint_index]
@@ -87,6 +85,7 @@ class Enemy(pg.sprite.Sprite):
                 self.game.life.deduct()
                 self.kill()
 
+        self.rect.topleft = vec(int(self.apparantPos.x),int(self.apparantPos.y))
         self.x = self.rect.x
         self.y = self.rect.y
 
