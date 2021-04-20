@@ -90,7 +90,16 @@ class Game(Baseclass):
         self.score = 0
         self.score_text = Text(*SCORETEXTPOSITION,"Score : %d"%self.score,self,32)
         self.all_sprites.add(self.score_text)
-    
+
+        self.last_paused = pg.time.get_ticks()
+
+        self.waiting = False
+
+        self.next_wave_button = Text(*NEXTWAVEBUTTONPOSITION,"Start Next Wave",self,32,-1,WHITE,button=1)
+        self.next_wave_button.pos = (WIDTH-self.next_wave_button.rect.width)//2 , NEXTWAVEBUTTONPOSITION[1]
+        self.all_sprites.add(self.next_wave_button)
+
+        
 
     def init_groups(self):
         '''Initialize all sprite groups'''
@@ -121,9 +130,30 @@ class Game(Baseclass):
             self.last_switched = now
         
         
+        mouse = pg.mouse.get_pos()
+        
+        if self.waiting:
+            if self.next_wave_button.rect.collidepoint(mouse):
+                self.next_wave_button.active = True
+            else:
+                self.next_wave_button.active = False
+
 
         self.check_collisions()
-        
+    
+
+    def start_next_wave(self):
+        now = pg.time.get_ticks()
+        self.stop_spawning = False
+        self.last_wave = now
+
+        self.wave += 1
+        self.n = self.wave * ENEMYMULTIPLIER
+        self.spawned_enemies = 0
+        self.wave_delay = self.wave * DELAYMULTIPLIER
+        self.wave_text.msg = "Wave : %d"%self.wave
+        self.waiting = False
+
     
 
     def spawn_enemies(self):
@@ -135,18 +165,9 @@ class Game(Baseclass):
             self.stop_spawning = True
             self.last_wave = now
 
+    
+
         
-        if now - self.last_wave > self.wave_delay * 10**3:
-            self.stop_spawning = False
-            self.last_wave = now
-
-            self.wave += 1
-            self.n = self.wave * ENEMYMULTIPLIER
-            self.spawned_enemies = 0
-            self.wave_delay = self.wave * DELAYMULTIPLIER
-            self.wave_text.msg = "Wave : %d"%self.wave
-            
-
 
 
         
@@ -163,6 +184,10 @@ class Game(Baseclass):
             self.spawned_enemies += 1
         
 
+        if len(self.enemies)==0:
+            self.waiting = True
+        else:
+            self.waiting = False
 
 
         
@@ -179,9 +204,15 @@ class Game(Baseclass):
             self.current_turret.active = True
         
         if key == pg.K_SPACE:
-            self.gameover()
+            self.pausegame()
 
     def mouseevents(self,button,action):
+
+        mouse = pg.mouse.get_pos()
+        if self.waiting:
+            if self.next_wave_button.rect.collidepoint(mouse):
+                self.start_next_wave()
+
         if action == pg.MOUSEBUTTONDOWN and button == 1:
             mx,my = pg.mouse.get_pos()
             for turret in self.turrets:
@@ -210,8 +241,11 @@ class Game(Baseclass):
                         self.all_sprites.add(base.turret)
                         self.turrets.add(base.turret)
                         self.all_sprites.add(base.turret.ammobar)
+
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
+        
+        
     
 
     def new_collide(self,sprite1,sprite2):
@@ -228,38 +262,65 @@ class Game(Baseclass):
                 for hit in hits:
                     if(enemy.isActive):
                         enemy.hp -= hit.damage
+    
+
+    def pausegame(self):
+        self.menu.pausemenu = PauseMenu(self,self.menu)
+        self.menu.pausemenu.screen2 = disp.copy()
+        self.menu.game_state = 2
+        now = pg.time.get_ticks()
+        self.last_paused = now 
 
     def gameover(self):
         self.menu.gameovermenu = GameoverMenu(self,self.menu)
         self.menu.gameovermenu.screen2 = disp.copy()
         self.menu.game_state = 3
+    
+    def unpause(self):
+        now = pg.time.get_ticks()
 
+        diff = now - self.last_paused
+        
+        sl = self.last_switched
+        self.last_update = diff + self.last_update
+        self.last_switched = diff +self.last_switched
+
+        
 
         
 
 
-class GameoverMenu(Baseclass):
+
+
+class PauseMenu(Baseclass):
     def __init__(self,game,menu):
         super().__init__()
         
         self.game = game
         self.texts = pg.sprite.Group()
-        txts = ["Game Over","Waves Cleared : %d"%(self.game.wave-1),"Highscore : %d"%self.game.score,"Play Again","Quit"]
-        txts2 = []
+        txts = ["Paused".center(10),"Continue","Quit".center(10)]
+
         txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]
-        txts2.append(txt)
-        txt = Text(*GAMEOVERTEXTPOSITIONS[1],txts[1],self.game,32,0,BLUE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[1][1]
-        txts2.append(txt)
-        txt = Text(*GAMEOVERTEXTPOSITIONS[2],txts[2],self.game,32,0,BLUE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[2][1]
-        txts2.append(txt)
+        txt.pos = (WIDTH-txt.rect.width)//2 , (HEIGHT-txt.rect.height*1.5)//2
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        
+        txt = Text(0,0,"Press any key to continue",self.game,22,0,WHITE,2)
+        txt.pos = (WIDTH-txt.rect.width)//2 , (HEIGHT+txt.rect.height*3)//2
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        
+        txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[1],self.game,32,3,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 -200, GAMEOVERTEXTPOSITIONS[3][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[2],self.game,32,4,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 +200, GAMEOVERTEXTPOSITIONS[4][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
 
+        self.menu = menu
 
-        for txt in txts2:
-            self.texts.add(txt)
-            self.all_sprites.add(txt)
         
         
         
@@ -279,7 +340,90 @@ class GameoverMenu(Baseclass):
 
     
     def events(self):
-        pass
+        mouse = pg.mouse.get_pos()
+        for txt in self.texts:
+            if txt.rect.collidepoint(mouse):
+                if txt.button==1:
+                    txt.active = True
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+
+                    if txt.ind == 3: #Continue
+                        self.menu.game_state = 1
+                        self.game.unpause()
+
+                    elif txt.ind == 4: #QUIT:
+                        pg.quit()
+                        quit()
+
+            else:
+                txt.active = False
+        
+
+
+class GameoverMenu(Baseclass):
+    def __init__(self,game,menu):
+        super().__init__()
+        
+        self.game = game
+        self.texts = pg.sprite.Group()
+        txts = ["Game Over","Waves Cleared : %d"%(self.game.wave-1),"Score : %d"%self.game.score,"Play Again","Quit".center(10)]
+        for i in range(3):
+            s=32 if i else 72
+            txt = Text(*GAMEOVERTEXTPOSITIONS[i],txts[i],self.game,s,i,BLUE,2)
+            txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[i][1]
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+        
+
+        txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[3],self.game,s,3,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 -200, GAMEOVERTEXTPOSITIONS[3][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[4],self.game,s,4,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 +200, GAMEOVERTEXTPOSITIONS[4][1]
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+
+        self.menu = menu
+        
+        
+        self.screen = disp
+        
+
+
+    def draw(self):
+        
+        self.screen.fill(-1)
+        self.screen.blit(self.screen2,(0,0))
+        self.all_sprites.update()
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
+        self.clock.tick(60)
+
+
+    
+    def events(self):
+        mouse = pg.mouse.get_pos()
+        for txt in self.texts:
+            if txt.rect.collidepoint(mouse):
+                if txt.button==1:
+                    txt.active = True
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    
+                    if txt.ind == 3: #New Game
+                        self.menu.game = Game(self.menu)
+                        self.menu.game_state = 1
+
+                    elif txt.ind == 4: #QUIT:
+                        pg.quit()
+                        quit()
+
+            else:
+                txt.active = False
+        
 
         
             
@@ -307,6 +451,10 @@ class Main(Baseclass):
                 if event.type == pg.KEYDOWN:
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
+                    elif self.game_state ==2:
+                        self.game_state = 1
+                        self.game.unpause()
+                
                         
                     
                     
@@ -324,6 +472,10 @@ class Main(Baseclass):
                 #game
                 self.game.events()
                 self.game.draw()
+            
+            elif self.game_state == 2:
+                self.pausemenu.events()
+                self.pausemenu.draw()
             
             elif self.game_state == 3:
                 self.gameovermenu.events()

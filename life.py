@@ -17,6 +17,9 @@ class Life:
 
     def deduct(self):
         self.health -= 1
+        if len(self.lives)== 0:
+            self.game.gameover()
+
         self.lives.sprites()[-1].kill()
 
     def update(self):
