@@ -3,17 +3,9 @@ from utility import *
 from settings import *
 
 class Bullet(pg.sprite.Sprite):
-    def __init__(self):
+    def __init__(self,x,y,angle,spread):
         
 
-        super().__init__()
-
-        self.image = pg.Surface((50,100))
-        self.rect = self.image.get_rect()
-        self.active = True
-
-class Arrow(Bullet):
-    def __init__(self,x,y,angle,spread):
         super().__init__()
 
         #Properties
@@ -41,8 +33,6 @@ class Arrow(Bullet):
         self.image = pg.transform.scale(self.image,(int(self.image.get_width()*1.25),int(self.image.get_height()*1.25)))
 
     def update(self):
-        if not self.active:
-            return
         if pg.time.get_ticks() - self.last_update > 10:
             self.rect.center += self.v
             self.last_update = pg.time.get_ticks()
@@ -50,3 +40,25 @@ class Arrow(Bullet):
         #self.rect.x += self.speed * math.cos(math.radians(self.angle)) * deltaTime(self.last_time)
         #self.rect.y += self.speed * math.sin(math.radians(self.angle)) * deltaTime(self.last_time)
         self.last_time = pg.time.get_ticks()
+
+class Arrow(Bullet):
+    def __init__(self,x,y,angle,spread):
+        super().__init__(x,y,angle,spread)
+
+class Bolt(Bullet):
+    def __init__(self,x,y,angle,spread):
+        super().__init__(x,y,angle,spread)
+        self.image = pg.image.load('Images/arrow2.png')
+        self.setImage()
+        self.speed = 15
+        self.formVel()
+        self.damage = TRIPLECROSSBOWDAMAGE
+
+class Cannonball(Bullet):
+    def __init__(self,x,y,angle,spread):
+        super().__init__(x,y,angle,spread)
+        self.image = pg.image.load('Images/Cannonball.png')
+        self.setImage()
+        self.speed = 25
+        self.formVel()
+        self.damage = CANNONDAMAGE
