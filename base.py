@@ -234,14 +234,15 @@ class Game(Baseclass):
 
         if action == pg.MOUSEBUTTONDOWN and button == 1:
             mx,my = pg.mouse.get_pos()
-            for turret in self.turrets:
-                if turret.rect.collidepoint(mx,my):
-                    self.current_turret.active = False
-                    self.current_turret.action = 0
-                    self.current_turret.animation_frame = 0
-                    self.current_turret = turret
-                    self.current_turret.active = True
-            self.current_turret.toggle_shoot(True)
+            if not self.waiting:
+                for turret in self.turrets:
+                    if turret.rect.collidepoint(mx,my):
+                        self.current_turret.active = False
+                        self.current_turret.action = 0
+                        self.current_turret.animation_frame = 0
+                        self.current_turret = turret
+                        self.current_turret.active = True
+                self.current_turret.toggle_shoot(True)
 
             self.mx,self.my = pg.mouse.get_pos()
             if self.waiting:
