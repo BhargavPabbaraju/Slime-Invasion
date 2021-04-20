@@ -50,10 +50,10 @@ class Baseclass:
 
 
 class Game(Baseclass):
-    def __init__(self,menu):
+    def __init__(self,menu,mapid=1):
         super().__init__()
 
-        self.mapid = 1
+        self.mapid = mapid
         self.available_turrets = []
 
         self.map = Map(self)
@@ -385,8 +385,8 @@ class MainMenu(Baseclass):
                 if clicks[0]:
                     
                     if txt.ind == 0: #New Game
-                        self.menu.game = Game(self.menu)
-                        self.menu.game_state = 1
+                        self.menu.game_state = 4
+                        self.menu.mapmenu = MapMenu(self.game,self.menu)
 
                     elif txt.ind == 4: #QUIT:
                         pg.quit()
@@ -535,6 +535,84 @@ class GameoverMenu(Baseclass):
         
 
 
+class MapMenu(Baseclass):
+    def __init__(self,game,menu):
+        super().__init__()
+        self.game = game
+        self.menu = menu
+
+        self.mapimgs = []
+        for i in range(1,3):
+            self.mapimgs.append(pg.image.load('Images/map%d.png'%i).convert())
+
+        for i in range(2):
+            map1 = pg.sprite.Sprite()
+            map1.image = self.mapimgs[i]
+            map1.rect = map1.image.get_rect()
+            map1.rect.topleft = 2*32+14*i*32,2*32
+            self.mapimgs[i] = map1
+            self.all_sprites.add(map1)
+
+        
+        self.texts = pg.sprite.Group()
+
+        txt = Text(0,0,"Map 1",self.game,32,1,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 -200,14*32
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+        txt = Text(0,0,"Map 2",self.game,32,2,WHITE,1)
+        txt.pos = (WIDTH-txt.rect.width)//2 +200,14*32
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+        self.menu = menu
+        
+        
+        self.screen = disp
+    
+
+    def draw(self):
+        
+        self.screen.fill(1)
+        self.all_sprites.update()
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
+        self.clock.tick(60)
+
+    def events(self):
+        mouse = pg.mouse.get_pos()
+        for txt in self.texts:
+            if txt.rect.collidepoint(mouse):
+                if txt.button==1:
+                    txt.active = True
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    
+                    if txt.ind == 1: #Map 1
+                        self.menu.game = Game(self.menu,mapid=1)
+                        self.menu.game_state = 1
+
+                    elif txt.ind == 2: #Map 2
+                        self.menu.game = Game(self.menu,mapid=2)
+                        self.menu.game_state = 1
+
+            else:
+                txt.active = False
+        
+
+        for i in range(2):
+            if self.mapimgs[i].rect.collidepoint(mouse):
+                self.mapimgs[i].image.set_alpha(100)
+                clicks = pg.mouse.get_pressed()
+                if clicks[0]:
+                    self.menu.game = Game(self.menu,mapid=i+1)
+                    self.menu.game_state = 1
+
+            else:
+                self.mapimgs[i].image.set_alpha(255)
+
+    
+
             
                         
 
@@ -545,12 +623,13 @@ class Main(Baseclass):
         self.game_state = 0
         self.game = Game(self)
         self.mainmenu = MainMenu(self.game,self)
+    
         
         #0 == InitialMenu
         #1 == Game
         #2 == PauseMenu
         #3 == GameoverMenu
-        #4 == 
+        #4 == MapSelectionMenu
 
 
     def loop(self):
@@ -567,8 +646,9 @@ class Main(Baseclass):
                         self.game_state = 1
                         self.game.unpause()
                     elif self.game_state == 0:
-                        self.game_state = 1
-                        self.game.unpause()
+                        self.game_state = 4
+                        self.mapmenu = MapMenu(self.game,self)
+                        
                     
                     
                     
@@ -594,6 +674,10 @@ class Main(Baseclass):
             elif self.game_state == 3:
                 self.gameovermenu.events()
                 self.gameovermenu.draw()
+            
+            elif self.game_state == 4:
+                self.mapmenu.events()
+                self.mapmenu.draw()
 
                 
 

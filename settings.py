@@ -11,7 +11,7 @@ from pygame.math import Vector2 as vec
 WIDTH = 960
 HEIGHT = 544
 
-TITLE = "Slimes Attack"
+TITLE = "Slimes Invasion"
 
 disp = pg.display.set_mode((WIDTH,HEIGHT))
 pg.display.set_caption(TITLE)
