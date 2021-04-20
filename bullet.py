@@ -59,6 +59,6 @@ class Cannonball(Bullet):
         super().__init__(x,y,angle,spread)
         self.image = pg.image.load('Images/Cannonball.png')
         self.setImage()
-        self.speed = 25
+        self.speed = 30
         self.formVel()
         self.damage = CANNONDAMAGE

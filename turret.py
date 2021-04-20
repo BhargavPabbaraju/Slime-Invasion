@@ -15,14 +15,13 @@ class Turret(pg.sprite.Sprite):
         self.y = self.c
         self.game = game
         self.last_time = pg.time.get_ticks()
-        self.ammo = 5
-        self.max_ammo = 5
 
         self.base = base
         self.sheet = Spritesheet('Images/CrossbowSheet.png')
         self.image = self.sheet.scale(0,0,48,32,(0,0,0),1.25)
         self.spr = self.image.copy()
         self.rect = self.image.get_rect()
+        self.recovery = 0.5
         self.base.rect.topleft = self.x,self.y
         self.animation_framerate = 52
         self.rect.center = self.base.rect.center
@@ -49,7 +48,7 @@ class Turret(pg.sprite.Sprite):
     def update(self):
         self.ammobar.set_ammo(int(self.ammo))
         if not self.active:
-            self.ammo += 2 * deltaTime(self.last_time)
+            self.ammo += (self.recovery*4) * deltaTime(self.last_time)
             if self.ammo > self.max_ammo:
                 self.ammo = self.max_ammo
             self.image = self.animation_database[self.action][self.animation_frame]
@@ -59,7 +58,7 @@ class Turret(pg.sprite.Sprite):
             return
 
         if self.action != 1:
-            self.ammo += 0.5 * deltaTime(self.last_time)
+            self.ammo += self.recovery * deltaTime(self.last_time)
             if self.ammo > self.max_ammo:
                 self.ammo = self.max_ammo
         self.animation_frame += deltaTime(self.last_time) * self.animation_framerate
@@ -149,7 +148,6 @@ class AmmoBar(pg.sprite.Sprite):
         self.ammo = ammo
 
     def update(self):
-        print(abs(int(self.ammo/self.maxammo)))
         self.image = pg.transform.scale(self.imagesource,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
         self.image = pg.transform.scale(self.imagesource,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
 
@@ -184,11 +182,13 @@ class CannonTurret(Turret):
         self.ammo = self.max_ammo
         self.shootmax = 3
         self.shootmin = 1
+        self.ammobar.maxammo = self.max_ammo
+        self.recovery = 0.1
         
     def shoot(self):
         self.shot = True
         self.ammo -= 1
-        self.ball = Cannonball(self.rect.center[0],self.rect.center[1],self.angle,0)
+        self.ball = Cannonball(self.rect.center[0],self.rect.center[1],self.angle,10)
         self.game.all_sprites.remove(self)
         self.game.all_sprites.add(self.ball)
         self.game.all_sprites.add(self)
