@@ -13,7 +13,6 @@ class Turret(pg.sprite.Sprite):
         self.c = c -1
         self.x = self.r
         self.y = self.c
-        self.cost = 10
         self.game = game
         self.last_time = pg.time.get_ticks()
         self.ammo = 5
@@ -159,7 +158,6 @@ class TripleCrossbowTurret(Turret):
         super().__init__(type,r,c,game,base)
         self.sheet = Spritesheet('Images/TripleCrossbowSheet.png')
         self.animation_framerate = 15
-        self.cost = 15
         
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
 
@@ -177,18 +175,28 @@ class TripleCrossbowTurret(Turret):
             self.game.bullets.add(self.arrow)
             self.arrow.rect.center = self.rect.center
 
+class CannonTurret(Turret):
+    def __init__(self,type,r,c,game,base):
+        super().__init__(type,r,c,game,base)
+        self.sheet = Spritesheet('Images/CannonSheet.png')
+        self.animation_framerate = 10
+        self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
+
 TURRETCLASSES = {
     0 : CrossbowTurret,
-    1 : TripleCrossbowTurret
+    1 : TripleCrossbowTurret,
+    2 : CannonTurret
 }
 
 TURRETIMAGES = {
     0 : pg.image.load('Images/CrossbowIcon.png'),
-    1 : pg.image.load('Images/TripleCrossbowIcon.png')
+    1 : pg.image.load('Images/TripleCrossbowIcon.png'),
+    2 : pg.image.load('Images/CannonIcon.png')
 }
 
 TURRETCOSTS = {
     0 : 10,
-    1 : 15
+    1 : 15,
+    2 : 15
 }
 
