@@ -542,28 +542,31 @@ class MapMenu(Baseclass):
         self.menu = menu
 
         self.mapimgs = []
-        for i in range(1,3):
+        for i in range(1,4):
             self.mapimgs.append(pg.image.load('Images/map%d.png'%i).convert())
 
-        for i in range(2):
+        positions = [[2*32,2*32],[17*32,2*32],[10*32,10*32]]
+        self.texts = pg.sprite.Group()
+
+        for i in range(3):
             map1 = pg.sprite.Sprite()
             map1.image = self.mapimgs[i]
             map1.rect = map1.image.get_rect()
-            map1.rect.topleft = 2*32+14*i*32,2*32
+            map1.rect.topleft = positions[i]
             self.mapimgs[i] = map1
             self.all_sprites.add(map1)
+            txt = Text(0,0,"Map %d"%(i+1),self.game,32,i+1,WHITE,1)
+            txt.rect.center = map1.rect.center
+            txt.pos = txt.rect.topleft[0],txt.rect.topleft[1] + 64
+
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
 
         
-        self.texts = pg.sprite.Group()
+        
 
-        txt = Text(0,0,"Map 1",self.game,32,1,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 -200,14*32
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
-        txt = Text(0,0,"Map 2",self.game,32,2,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 +200,14*32
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
+        
+      
 
         self.menu = menu
         
