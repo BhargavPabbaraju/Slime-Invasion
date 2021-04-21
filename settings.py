@@ -20,7 +20,10 @@ mx.pre_init(44100,-16,2,512)
 
 sounds = {
     'CrossbowShoot' : mx.Sound('Sounds/crossbowsound.wav'),
-    'SlimeHit' : mx.Sound('Sounds/slimehit.ogg')
+    'SlimeHit' : mx.Sound('Sounds/slimehit.ogg'),
+    'SlimeDie' : mx.Sound('Sounds/slimedie.wav'),
+    'TripleCrossbowShoot' : mx.Sound('Sounds/triplecrossbowsound.wav'),
+    'CannonShoot' : mx.Sound('Sounds/cannonsound.wav')
 }
 
 CROSSBOWDAMAGE = 5
