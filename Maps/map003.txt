@@ -29,8 +29,8 @@ g g g g g g g g g g g g g d d 0 0 d d g g g g g g g g g g g
 0 15 1
 0 1 15
 #ENEMY SPAWN POSITIONS x y
-928 80
-928 364
+928 137
+0 137
 #TURRET TYPES
 3
 0

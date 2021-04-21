@@ -27,7 +27,7 @@ class Tile(pg.sprite.Sprite):
         self.origimg = self.image
 
         self.last_update = pg.time.get_ticks()
-        self.update_thres = 150
+        self.update_thres = 200
 
         self.offset = 1
 
@@ -79,7 +79,7 @@ class Tile(pg.sprite.Sprite):
                 self.image.blit(self.origimg,(0,self.offset))
                 self.offset+=1
 
-                if self.offset==16:
+                if self.offset==15:
                     self.offset = 1
 
             

@@ -267,7 +267,7 @@ class TealSlime(Enemy):
 
      def __init__(self,x,y,game,lane):
         super().__init__('Images/slime5.png',x,y,game,1,lane)
-        self.hp = PINKSLIMEHEALTH
+        self.hp = TEALSLIMEHEALTH
         self.housingSpace = 2.5
         self.dropchance =   50
         self.type = 5
