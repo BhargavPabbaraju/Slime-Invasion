@@ -17,16 +17,24 @@ disp = pg.display.set_mode((WIDTH,HEIGHT))
 pg.display.set_caption(TITLE)
 pg.init()
 mx.pre_init(44100,-16,2,512)
+mx.set_num_channels(16)
 
 sounds = {
     'CrossbowShoot' : mx.Sound('Sounds/crossbowsound.wav'),
     'SlimeHit' : mx.Sound('Sounds/slimehit.ogg'),
     'SlimeDie' : mx.Sound('Sounds/slimedie.wav'),
     'TripleCrossbowShoot' : mx.Sound('Sounds/triplecrossbowsound.wav'),
-    'CannonShoot' : mx.Sound('Sounds/cannonsound.wav')
+    'CannonShoot' : mx.Sound('Sounds/cannonsound.wav'),
+    'GameOver' : mx.Sound('Sounds/GameOver.wav'),
+    'WaveStart' : mx.Sound('Sounds/WaveStart.wav')
+}
+music = {
+    'Shop' : 'Sounds/Loop.wav',
+    'Wave' : 'Sounds/Loop1.wav',
+    'MainMenu' : 'Sounds/MainMenu.wav'
 }
 
-CROSSBOWDAMAGE = 5
+CROSSBOWDAMAGE = 3
 CANNONDAMAGE = 35
 TRIPLECROSSBOWDAMAGE = 9
 AMMOBARWIDTH = 50

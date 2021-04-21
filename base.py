@@ -57,6 +57,7 @@ class Game(Baseclass):
         self.available_turrets = []
 
         self.map = Map(self)
+        self.shopFlag = False
 
         self.screenflash = ScreenFlash(self)
         self.all_sprites.add(self.screenflash)
@@ -154,6 +155,11 @@ class Game(Baseclass):
         for turret in self.turrets:
             turret.refreshAmmo()
 
+        self.shopFlag = False
+        sounds['WaveStart'].play()
+        mx.music.unload()
+        mx.music.load(music['Wave'])
+        mx.music.play(-1)
         self.wave += 1
         self.n = self.wave * ENEMYMULTIPLIER
         self.spawned_enemies = 0
@@ -196,6 +202,11 @@ class Game(Baseclass):
 
         if len(self.enemies)==0:
             self.waiting = True
+            if not self.shopFlag:
+                mx.music.unload()
+                mx.music.load(music['Shop'])
+                mx.music.play(-1)
+                self.shopFlag = True
             self.shop_unhide()
         else:
             self.waiting = False
@@ -291,6 +302,7 @@ class Game(Baseclass):
         self.last_paused = now 
 
     def gameover(self):
+        sounds['GameOver'].play()
         self.menu.gameovermenu = GameoverMenu(self,self.menu)
         self.menu.gameovermenu.screen2 = disp.copy()
         self.menu.game_state = 3
@@ -323,7 +335,9 @@ class MainMenu(Baseclass):
         txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]+2*32
         self.texts.add(txt)
         self.all_sprites.add(txt)
-
+        mx.music.unload()
+        mx.music.load(music['MainMenu'])
+        mx.music.play(-1)
 
         txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,32,0,WHITE,1)
         txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[3][1]

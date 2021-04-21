@@ -98,12 +98,12 @@ class Turret(pg.sprite.Sprite):
 
     def toggleSuper(self):
         if self.super == True:
-            self.animation_framerate = 52
+            self.animation_framerate = 73
             self.infiniteAmmo = False
             self.super = False
         elif self.super == False and not self.usedSuper:
             self.usedSuper = True
-            self.animation_framerate = 90
+            self.animation_framerate = 120
             self.infiniteAmmo = True
             self.super = True
 
