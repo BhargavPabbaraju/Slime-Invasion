@@ -237,7 +237,7 @@ class AmmoBar(pg.sprite.Sprite):
 class CrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):
         super().__init__(type,r,c,game,base)
-        self.damage = TRIPLECROSSBOWDAMAGE
+        self.damage = CROSSBOWDAMAGE
 
 class TripleCrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):
