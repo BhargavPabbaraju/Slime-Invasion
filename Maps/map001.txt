@@ -17,11 +17,16 @@ g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
 g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
 g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
 #TURRETS type y x
-8
+13
 0 14 11
 0 14 20
 0 4 14
+0 6 4
+0 14 6
 0 5 22
+0 4 18
+0 5 26
+0 14 27
 0 10 10
 1 2 10
 1 9 20

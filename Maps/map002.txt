@@ -9,25 +9,27 @@ d d d d d d d d d d d d d g g g g d d d d d d d d d 0 0 0 0
 g g g d d g g g g g g d d g g g g d d d d d d d d d 0 0 0 0
 g g g d d g g g g g g d d d d d d d d g g 0 0 0 0 g g g g g
 g g g d d d d d d g g d d d d d d d d g g 0 0 0 0 g g g g g
-g g g d d d d d d g g 0 0 0 0 0 0 0 0 0 g 0 0 0 0 g g g g g
-g g g g g g g d d g g 0 0 0 0 0 0 0 0 0 g 0 0 0 0 d d d d d
+g g g d d d d d d g g 0 0 0 0 g g 0 0 g g 0 0 0 0 g g g g g
+g g g g g g g d d g g 0 0 0 0 g g 0 0 g g 0 0 0 0 d d d d d
 g g g g g g g d d d d d d d d d d d d d g 0 0 0 0 d d d d d
 g g g g g g g d d d d d d d d d d d d d g 0 0 0 0 d d g g g
 g g 0 0 0 0 0 0 0 0 0 g g g g g g g d d d d d d d d d g g g
 g g 0 0 0 0 0 0 0 0 0 g g g g g g g d d d d d d d d d g g g
 g g 0 0 0 0 0 0 0 0 0 g g g g g g g g g g g g g g g g g g g
 #TURRETS type x y
-10
-0 16 25
-0 11 22
-0 12 11
-0 8 6
-0 3 6
-0 16 11
-0 24 17
-0 1 25
-0 15 1
-0 1 15
+12
+0 8 10
+0 12 3
+0 15 12
+0 10 20
+0 9 26
+0 7 15
+0 5 23
+0 4 3
+0 11 16
+0 4 10
+0 12 6
+0 15 17
 #ENEMY SPAWN POSITIONS x y
 928 80
 928 364
