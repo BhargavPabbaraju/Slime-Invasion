@@ -23,6 +23,15 @@ class Tile(pg.sprite.Sprite):
         self.bgcolor = (37,52,49)
 
         self.imagify()
+
+        self.origimg = self.image
+
+        self.last_update = pg.time.get_ticks()
+        self.update_thres = 150
+
+        self.offset = 1
+
+
     
     def letters_to_numbers(self):
         '''
@@ -56,6 +65,25 @@ class Tile(pg.sprite.Sprite):
             return False
         
         return True
+    
+    def update(self):
+        if self.type=="0" and self.game.mapid==3:
+
+            now = pg.time.get_ticks()
+
+            
+            if now - self.last_update > self.update_thres:
+            
+                self.image = pg.Surface((32,32))
+                self.image.blit(self.origimg,(0,-self.offset))
+                self.image.blit(self.origimg,(0,self.offset))
+                self.offset+=1
+
+                if self.offset==16:
+                    self.offset = 1
+
+            
+                self.last_update = now
         
 
 

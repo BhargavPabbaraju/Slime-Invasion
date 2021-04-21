@@ -598,6 +598,11 @@ class MapMenu(Baseclass):
                     elif txt.ind == 2: #Map 2
                         self.menu.game = Game(self.menu,mapid=2)
                         self.menu.game_state = 1
+                    
+                    elif txt.ind == 3: #Map 3
+                        self.menu.game = Game(self.menu,mapid=3)
+                        self.menu.game_state = 1
+                        
 
             else:
                 txt.active = False

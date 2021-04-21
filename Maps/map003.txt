@@ -1,0 +1,38 @@
+#MAP GRID
+g g g g g g g g 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 g g g g g g g
+g g g g g g g g 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 g g g g g g g
+g g g g g g g g 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 g g g g g g g
+g g g g g g g g 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 g g g g g g g
+d d d d d d d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d d d d d d
+d d d d d d d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d d d d d d
+g g g g g g d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d g g g g g
+g g g g g g d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d g g g g g
+g g g g g g d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d g g g g g
+g g g g g g d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d g g g g g
+g g g g g g d d 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 d d g g g g g
+g g g g g g d d d d d d d d d 0 0 d d d d d d d d g g g g g
+g g g g g g d d d d d d d d d 0 0 d d d d d d d d g g g g g
+g g g g g g g g g g g g g d d 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g d d 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g d d 0 0 d d g g g g g g g g g g g
+g g g g g g g g g g g g g d d 0 0 d d g g g g g g g g g g g
+#TURRETS type x y
+10
+0 16 25
+0 11 22
+0 12 11
+0 8 6
+0 3 6
+0 16 11
+0 24 17
+0 1 25
+0 15 1
+0 1 15
+#ENEMY SPAWN POSITIONS x y
+928 80
+928 364
+#TURRET TYPES
+3
+0
+1
+2
