@@ -15,6 +15,7 @@ class Enemy(pg.sprite.Sprite):
 
         self.color = (0,0,0)
         self.index = 0
+        self.housingSpace = 1
         self.x = x
         self.y = y
         self.apparantX = self.x
@@ -216,7 +217,7 @@ class GreenSlime(Enemy):
         super().__init__('Images/slime0.png',x,y,game,1,lane)
         
         self.hp = GREENSLIMEHEALTH
-
+        self.dropchance = 5
         self.type = 0
 
 
@@ -226,17 +227,19 @@ class BlueSlime(Enemy):
         super().__init__('Images/slime1.png',x,y,game,1,lane)
 
         self.hp = BLUESLIMEHEALTH
-        self.dropchance = 30
+        self.housingSpace = 2
+        self.dropchance = 10
         self.type = 1
 
 
 class PinkSlime(Enemy):
 
     def __init__(self,x,y,game,lane):
-        super().__init__('Images/slime2.png',x,y,game,1,lane)
+        super().__init__('Images/slime2.png',x,y,game,0.75,lane)
 
         self.hp = PINKSLIMEHEALTH
-        self.dropchance = 40
+        self.housingSpace = 3.5
+        self.dropchance = 15
         self.type = 2
 
 
@@ -245,25 +248,26 @@ class OrangeSlime(Enemy):
     def __init__(self,x,y,game,lane):
         super().__init__('Images/slime3.png',x,y,game,1.5,lane)
 
-        self.hp = PINKSLIMEHEALTH
-        self.dropchance =   10
+        self.hp = ORANGESLIMEHEALTH
+        self.housingSpace = 1
+        self.dropchance = 8
         self.type = 3
 
 class YellowSlime(Enemy):
 
      def __init__(self,x,y,game,lane):
-        super().__init__('Images/slime4.png',x,y,game,0.5,lane)
-
-        self.hp = PINKSLIMEHEALTH
-        self.dropchance =   60
+        super().__init__('Images/slime4.png',x,y,game,0.75,lane)
+        self.hp = YELLOWSLIMEHEALTH
+        self.housingSpace = 4
+        self.dropchance = 50
         self.type = 4
 
 class TealSlime(Enemy):
 
      def __init__(self,x,y,game,lane):
-        super().__init__('Images/slime5.png',x,y,game,0.5,lane)
-
+        super().__init__('Images/slime5.png',x,y,game,1,lane)
         self.hp = PINKSLIMEHEALTH
+        self.housingSpace = 2.5
         self.dropchance =   50
         self.type = 5
 

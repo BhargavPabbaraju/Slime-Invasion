@@ -181,19 +181,9 @@ class Game(Baseclass):
         now = pg.time.get_ticks()
 
 
-        if self.spawned_enemies==self.n and not self.stop_spawning:
+        if self.spawned_enemies>=self.n and not self.stop_spawning:
             self.stop_spawning = True
             self.last_wave = now
-
-    
-
-        
-
-
-        
-
-
-        
 
         if not self.stop_spawning:
             typ = rd.choice([0,1,2,3,4,5])
@@ -201,7 +191,7 @@ class Game(Baseclass):
             en = ENEMYCLASSES[typ](*self.enemy_positions[lane],self,lane)
             self.all_sprites.add(en)
             self.enemies.add(en)
-            self.spawned_enemies += 1
+            self.spawned_enemies += en.housingSpace
         
 
         if len(self.enemies)==0:
