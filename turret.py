@@ -245,6 +245,7 @@ class TripleCrossbowTurret(Turret):
         self.sheet = Spritesheet('Images/TripleCrossbowSheet.png')
         self.animation_framerate = 15
         self.damage = TRIPLECROSSBOWDAMAGE
+        self.shootSound = sounds['TripleCrossbowShoot']
         self.spread = 15
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
 
@@ -255,7 +256,7 @@ class TripleCrossbowTurret(Turret):
             self.spread = 15
             self.super = False
         elif self.super == False:
-            self.spread = 5
+            self.spread = 2
             self.infiniteAmmo = True
             self.damage = CANNONDAMAGE * 3
             self.super = True
@@ -265,6 +266,7 @@ class TripleCrossbowTurret(Turret):
         if not self.infiniteAmmo:
             self.ammo -= 3
         for x in range(3):
+            self.shootSound.play()
             self.arrow = Bolt(self.rect.center[0],self.rect.center[1],self.angle - self.spread+ self.spread*x,0)
             self.game.all_sprites.add(self.arrow)
             self.game.bullets.add(self.arrow)
@@ -276,6 +278,7 @@ class CannonTurret(Turret):
         self.sheet = Spritesheet('Images/CannonSheet.png')
         self.animation_framerate = 10
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
+        self.shootSound = sounds['CannonShoot']
         self.max_ammo = 20
         self.ammo = self.max_ammo
         self.shootmax = 3
@@ -298,6 +301,7 @@ class CannonTurret(Turret):
         self.shot = True
         if not self.infiniteAmmo:
             self.ammo -= 5
+        self.shootSound.play()
         self.ball = Cannonball(self.rect.center[0],self.rect.center[1],self.angle,10)
         self.game.all_sprites.remove(self)
         self.game.all_sprites.add(self.ball)

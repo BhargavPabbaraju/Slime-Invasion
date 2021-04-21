@@ -190,6 +190,7 @@ class Enemy(pg.sprite.Sprite):
         if self.hp<=0:
             #self.kill()
             self.isActive = False
+            sounds['SlimeDie'].play()
             self.action = 2
             for x in range(5):
                 self.rand = rd.randint(1,100)
