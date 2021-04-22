@@ -1,4 +1,5 @@
 from  sprites import *
+from tutorial import *
 
 class Baseclass:
     def __init__(self,width=WIDTH,height=HEIGHT):
@@ -17,7 +18,7 @@ class Baseclass:
         '''Initialize all sprite groups'''
 
         self.all_sprites = pg.sprite.Group()
-        
+        self.texts = pg.sprite.Group()
 
 
     def draw(self):
@@ -324,7 +325,6 @@ class MainMenu(Baseclass):
         super().__init__()
 
         self.game = game
-        self.texts = pg.sprite.Group()
 
         txts = ["Play".center(10),"How to Play","Quit".center(10)]
 
@@ -391,6 +391,10 @@ class MainMenu(Baseclass):
                     if txt.ind == 0: #New Game
                         self.menu.game_state = 4
                         self.menu.mapmenu = MapMenu(self.game,self.menu)
+                    
+                    if txt.ind == 3: #How to Play
+                        self.menu.game_state = 5
+                        self.menu.htpmenu = HowtoPlayMenu(self.game,self.menu)
 
                     elif txt.ind == 4: #QUIT:
                         pg.quit()
@@ -410,7 +414,7 @@ class PauseMenu(Baseclass):
         super().__init__()
         
         self.game = game
-        self.texts = pg.sprite.Group()
+       
         txts = ["Paused".center(10),"Continue","Quit".center(10)]
 
         txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
@@ -479,7 +483,7 @@ class GameoverMenu(Baseclass):
         super().__init__()
         
         self.game = game
-        self.texts = pg.sprite.Group()
+        
         txts = ["Game Over","Waves Cleared : %d"%(self.game.wave-1),"Score : %d"%self.game.score,"Play Again","Quit".center(10)]
         for i in range(3):
             s=32 if i else 72
@@ -527,8 +531,7 @@ class GameoverMenu(Baseclass):
                 if clicks[0]:
                     
                     if txt.ind == 3: #New Game
-                        self.menu.game = Game(self.menu)
-                        self.menu.game_state = 1
+                        self.menu.game_state = 4
 
                     elif txt.ind == 4: #QUIT:
                         pg.quit()
@@ -642,10 +645,12 @@ class Main(Baseclass):
         #2 == PauseMenu
         #3 == GameoverMenu
         #4 == MapSelectionMenu
+        #5 == HowtoPlayMenu
 
 
     def loop(self):
         while not self.exit:
+
             for event in pg.event.get():
                 if event.type == pg.QUIT:
                     pg.quit()
@@ -654,19 +659,22 @@ class Main(Baseclass):
                 if event.type == pg.KEYDOWN:
                     if self.game_state ==1:
                         self.game.keyevents(event.key)
+
                     elif self.game_state ==2:
                         self.game_state = 1
                         self.game.unpause()
-                    elif self.game_state == 0:
-                        self.game_state = 4
-                        self.mapmenu = MapMenu(self.game,self)
+                    
                         
                     
                     
                     
 
                 if event.type == pg.MOUSEBUTTONDOWN or event.type == pg.MOUSEBUTTONUP:
-                    self.game.mouseevents(event.button,event.type)
+                    if self.game_state ==1:
+                        self.game.mouseevents(event.button,event.type)
+                    
+                    elif self.game_state == 5:
+                        self.htpmenu.events(clicked=True)
 
 
             if self.game_state == 0:
@@ -690,9 +698,88 @@ class Main(Baseclass):
             elif self.game_state == 4:
                 self.mapmenu.events()
                 self.mapmenu.draw()
+            
+            elif self.game_state == 5:
+                self.htpmenu.events()
+                self.htpmenu.draw()
 
                 
 
+
+
+class HowtoPlayMenu(Baseclass):
+    def __init__(self,game,menu):
+        super().__init__()
+        self.game = game 
+        self.menu = menu
+
+        self.page = 0
+
+    
+        self.load_texts()
+
+
+        self.screen = disp
+
+        
+    
+
+    def load_texts(self):
+        self.nextbut = None
+        self.prevbut = None
+        self.texts = pg.sprite.Group()
+        self.all_sprites = pg.sprite.Group()
+        x = 2*32
+        y = 2*32
+        for msg in TEXTDUMP[self.page]:
+            txt = Text(x,y,msg,self.game,32,0,WHITE)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+            y+=32+6
+        
+        if self.page<5:
+            txt = Text(24*32,13*32,"Next".center(5),self.game,32,2,WHITE,1)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+            self.nextbut = txt
+        if self.page>0:
+            txt = Text(3*32,13*32,"Prev".center(5),self.game,32,3,WHITE,1)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+            self.prevbut = txt
+
+
+    def draw(self):
+        self.screen.fill(1)
+        self.all_sprites.update()
+        self.all_sprites.draw(self.screen)
+        pg.display.flip()
+
+
+
+    def events(self,clicked=False):
+        mouse = pg.mouse.get_pos()
+        if self.nextbut:
+            if self.nextbut.rect.collidepoint(mouse):
+                self.nextbut.active = True
+                if clicked:
+                    self.page+=1
+                    self.load_texts()
+                    pg.time.wait(200)
+            else:
+                self.nextbut.active = False
+        
+        if self.prevbut:
+            if self.prevbut.rect.collidepoint(mouse):
+                self.prevbut.active = True
+                if clicked:
+                    self.page-=1
+                    self.load_texts()
+                    pg.time.wait(200)
+            else:
+                self.prevbut.active = False
+
+        
 
 
         
