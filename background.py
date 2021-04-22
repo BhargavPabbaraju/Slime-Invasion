@@ -20,12 +20,18 @@ class Bgsprite(pg.sprite.Sprite):
             self.dir = -1
         else:
             self.dir = 1
-        
+
         self.last_update = pg.time.get_ticks() + rd.randint(100,200)
         self.update_thres = 50
-        self.pos_offset = 0 -self.offset
 
         self.limit = 10
+
+        if not self.type in ["bg","bg1","title"]:
+            self.origin = 15 * self.dir
+            self.rect.x = 15 * self.dir
+
+            self.pos_offset = self.origin -self.offset
+        
 
     def update(self):
         if self.type in ["bg","bg1","title"]:
@@ -33,7 +39,7 @@ class Bgsprite(pg.sprite.Sprite):
 
         now = pg.time.get_ticks()
         
-        self.pos_offset = 0 - self.rect.x
+        self.pos_offset = self.origin - self.rect.x
 
         if now - self.last_update >= self.update_thres:
             self.offset += self.speed
