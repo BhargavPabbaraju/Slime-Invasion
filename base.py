@@ -144,7 +144,7 @@ class Game(Baseclass):
         
         mouse = pg.mouse.get_pos()
 
-        if pg.time.get_ticks() - self.last_switched > 9500:
+        if pg.time.get_ticks() - self.last_switched > 9800:
             self.flash.flash()
         
         if self.waiting:
