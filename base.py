@@ -144,7 +144,7 @@ class Game(Baseclass):
         
         mouse = pg.mouse.get_pos()
 
-        if pg.time.get_ticks() - self.last_switched > 9500:
+        if pg.time.get_ticks() - self.last_switched > 9800:
             self.flash.flash()
         
         if self.waiting:
@@ -733,7 +733,23 @@ class HowtoPlayMenu(Baseclass):
 
         self.screen = disp
 
-        
+    
+    def turretpage(self):
+        n = len(TURRETCLASSES)
+        info = {
+            'damage':[],
+            'name':[],
+            'image':[]
+        }
+        for i in range(n):
+            ms = MenuSprite(i,x,y,self.game,False)
+            cl = TURRETCLASSES[i]
+            info['damage'].append(cl.damage)
+            info['name'].append(cl.name)
+            info['image'].append(TURRETIMAGES[i])
+
+
+
     
 
     def load_texts(self):

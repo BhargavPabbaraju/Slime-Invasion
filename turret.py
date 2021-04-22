@@ -50,6 +50,8 @@ class Turret(pg.sprite.Sprite):
 
         self.active = False
 
+        
+
     def update(self):
         self.ammobar.set_ammo(int(self.ammo),not self.usedSuper or self.super)
         if self.super:
@@ -245,6 +247,9 @@ class CrossbowTurret(Turret):
         super().__init__(type,r,c,game,base)
         self.damage = CROSSBOWDAMAGE
 
+        self.name = "Crossbow"
+        
+
 class TripleCrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):
         super().__init__(type,r,c,game,base)
@@ -254,6 +259,9 @@ class TripleCrossbowTurret(Turret):
         self.shootSound = sounds['TripleCrossbowShoot']
         self.spread = 15
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
+
+        self.name = "Triple Crossbow"
+        
 
     def toggleSuper(self):
         if self.super == True:
@@ -292,6 +300,9 @@ class CannonTurret(Turret):
         self.damage = CANNONDAMAGE
         self.ammobar.maxammo = self.max_ammo
         self.recovery = 0.2
+
+        self.name = "Cannon"
+        
         
     def toggleSuper(self):
         if self.super == True:
@@ -323,9 +334,9 @@ TURRETCLASSES = {
 }
 
 TURRETIMAGES = {
-    0 : pg.image.load('Images/CrossbowIcon.png'),
-    1 : pg.image.load('Images/TripleCrossbowIcon.png'),
-    2 : pg.image.load('Images/CannonIcon.png')
+    0 : pg.image.load('Images/CrossbowIcon.png').convert_alpha(),
+    1 : pg.image.load('Images/TripleCrossbowIcon.png').convert_alpha(),
+    2 : pg.image.load('Images/CannonIcon.png').convert_alpha()
 }
 
 TURRETCOSTS = {

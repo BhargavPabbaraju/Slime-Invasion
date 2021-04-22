@@ -192,12 +192,12 @@ class ScreenFlash(pg.sprite.Sprite):
 class Flash(ScreenFlash):
     def __init__(self,game):
         super().__init__(game)
-        self.image = pg.image.load('Images/flash.png').convert_alpha()
+        self.image = pg.transform.scale(pg.image.load('Images/flash.png').convert_alpha(),(960,544))
         self.last_flash = 600
         self.flashed = False
 
     def update(self):
-        if self.flashed and pg.time.get_ticks() - self.last_flash < 500:
+        if self.flashed and pg.time.get_ticks() - self.last_flash < 200:
             self.image.set_alpha(Lerp(self.image.get_alpha(),255,8 * deltaTime(self.last_time)))
         else :
             self.flashed = False
@@ -210,3 +210,23 @@ class Flash(ScreenFlash):
             return
         self.flashed = True
         self.last_flash = pg.time.get_ticks()
+
+
+
+class MenuSprite(pg.sprite.Sprite):
+    def __init__(self,ind,x,y,game,isslime=False):
+        super().__init__()
+
+        self.ind =ind
+        self.name = name
+        self.pos = x,y
+        self.isslime = isslime
+
+        self.game = game 
+
+        if not self.isslime:
+            pass
+
+        
+
+
