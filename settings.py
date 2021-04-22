@@ -54,7 +54,7 @@ YELLOWSLIMEHEALTH = 50
 TEALSLIMEHEALTH = 35
 
 
-BGTYPES = ["bg","bushleft","bushright","slimeblue","slimegreen","treeleft","treeright"]
+BGTYPES = ["bg1","bushleft","bushright","slimeblue","slimegreen","treeleft","treeright"]
 
 
 
