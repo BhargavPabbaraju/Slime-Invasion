@@ -351,6 +351,8 @@ class MainMenu(Baseclass):
 
 
         self.menu = menu
+
+        self.flash = Flash(self.game)
         
         
         self.bgsprites = pg.sprite.Group()
@@ -383,6 +385,7 @@ class MainMenu(Baseclass):
         self.all_sprites.add(txt)
 
         self.screen = disp
+        self.all_sprites.add(self.flash)
 
         
     
@@ -407,10 +410,12 @@ class MainMenu(Baseclass):
                     if txt.ind == 1: #New Game
                         self.menu.game_state = 4
                         self.menu.mapmenu = MapMenu(self.game,self.menu)
+                        self.flash.flash()
                     
                     if txt.ind == 3: #How to Play
                         self.menu.game_state = 5
                         self.menu.htpmenu = HowtoPlayMenu(self.game,self.menu)
+                        self.flash.flash()
 
                     elif txt.ind == 4: #QUIT:
                         pg.quit()
@@ -431,7 +436,7 @@ class PauseMenu(Baseclass):
         
         self.game = game
        
-        txts = ["Paused".center(10),"Continue","Quit".center(10)]
+        txts = ["Paused".center(10),"Continue".center(17),"Back to Main Menu".center(10)]
 
         txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,72,0,BLUE,2)
         txt.pos = (WIDTH-txt.rect.width)//2 , (HEIGHT-txt.rect.height*1.5)//2
@@ -458,6 +463,9 @@ class PauseMenu(Baseclass):
         
         
         self.screen = disp
+
+        self.flash = Flash(self.game)
+        self.all_sprites.add(self.flash)
         
 
 
@@ -472,23 +480,25 @@ class PauseMenu(Baseclass):
 
 
     
-    def events(self):
+    def events(self,clicked=False):
         mouse = pg.mouse.get_pos()
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
                 if txt.button==1:
+                    if txt.active == False:
+                        sounds['Hover'].play()
                     txt.active = True
-                clicks = pg.mouse.get_pressed()
-                if clicks[0]:
-
+                if clicked:
+                    sounds['Click'].play()
                     if txt.ind == 3: #Continue
                         self.menu.game_state = 1
                         self.game.unpause()
+                        self.flash.flash()
 
                     elif txt.ind == 4: #QUIT:
-                        pg.quit()
-                        quit()
 
+                        self.menu.game_state = 0
+                        self.flash.flash()
             else:
                 txt.active = False
         
@@ -586,6 +596,9 @@ class MapMenu(Baseclass):
 
             self.texts.add(txt)
             self.all_sprites.add(txt)
+    
+        self.flash = Flash(self.game)
+        self.all_sprites.add(self.flash)
 
         
         
@@ -620,20 +633,28 @@ class MapMenu(Baseclass):
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
                 if txt.button==1:
+                    if txt.active == False:
+                        sounds['Hover'].play()
                     txt.active = True
                 if clicked:
-                    
+                    sounds['Click'].play()
                     if txt.ind == 1: #Map 1
                         self.menu.game = Game(self.menu,mapid=1)
                         self.menu.game_state = 1
+                        self.flash.flash()
+                        return
 
                     elif txt.ind == 2: #Map 2
                         self.menu.game = Game(self.menu,mapid=2)
                         self.menu.game_state = 1
+                        self.flash.flash()
+                        return
                     
                     elif txt.ind == 3: #Map 3
                         self.menu.game = Game(self.menu,mapid=3)
                         self.menu.game_state = 1
+                        self.flash.flash()
+                        return
                         
 
             else:
@@ -644,8 +665,11 @@ class MapMenu(Baseclass):
             if self.mapimgs[i].rect.collidepoint(mouse):
                 self.mapimgs[i].image.set_alpha(100)
                 if clicked:
+                    sounds['Click'].play()
                     self.menu.game = Game(self.menu,mapid=i+1)
                     self.menu.game_state = 1
+                    self.flash.flash()
+                    return
 
             else:
                 self.mapimgs[i].image.set_alpha(255)
@@ -662,6 +686,7 @@ class Main(Baseclass):
         self.game_state = 0
         self.game = Game(self)
         self.mainmenu = MainMenu(self.game,self)
+        
     
         
         #0 == InitialMenu
@@ -687,6 +712,7 @@ class Main(Baseclass):
                     elif self.game_state ==2:
                         self.game_state = 1
                         self.game.unpause()
+                        self.flash.flash()
                     
                         
                     
@@ -705,6 +731,8 @@ class Main(Baseclass):
                         self.mainmenu.events(clicked=True)
                     elif self.game_state == 4:
                         self.mapmenu.events(clicked=True)
+                    elif self.game_state == 2:
+                        self.pausemenu.events(clicked=True)
                    
 
 
@@ -746,11 +774,14 @@ class HowtoPlayMenu(Baseclass):
 
         self.page = 0
 
-    
+        self.flash = Flash(self.game)
         self.load_texts()
 
 
         self.screen = disp
+
+        
+    
 
     
     def turretpage(self,isslime=False):
@@ -784,6 +815,8 @@ class HowtoPlayMenu(Baseclass):
             self.all_sprites.add(txt)
 
             y+=32+16
+
+
             
 
 
@@ -822,6 +855,9 @@ class HowtoPlayMenu(Baseclass):
             
         elif self.page == 5:
             self.turretpage(True)
+        
+
+        self.all_sprites.add(self.flash)
             
 
 
@@ -837,32 +873,45 @@ class HowtoPlayMenu(Baseclass):
         mouse = pg.mouse.get_pos()
         if self.nextbut:
             if self.nextbut.rect.collidepoint(mouse):
+                
+                if self.nextbut.active == False:
+                        sounds['Hover'].play()
+                    
                 self.nextbut.active = True
                 if clicked:
+                    sounds['Click'].play()
                     self.page+=1
                     self.load_texts()
-                    pg.time.wait(200)
+                    #pg.time.wait(200)
+                    self.flash.flash()
                     return
             else:
                 self.nextbut.active = False
         
         if self.prevbut:
             if self.prevbut.rect.collidepoint(mouse):
+                if self.prevbut.active == False:
+                        sounds['Hover'].play()
                 self.prevbut.active = True
                 if clicked:
-                    
+                    sounds['Click'].play()
                     self.page-=1
                     self.load_texts()
-                    pg.time.wait(200)
+                    #pg.time.wait(200)
+                    self.flash.flash()
                     
             else:
                 self.prevbut.active = False
         
         if self.page==5 and self.backbut:
             if self.backbut.rect.collidepoint(mouse):
+                if self.backbut.active == False:
+                        sounds['Hover'].play()
                 self.backbut.active = True
                 if clicked:
-                    pg.time.wait(200)
+                    sounds['Click'].play()
+                    #pg.time.wait(200)
+                    self.flash.flash()
                     self.menu.game_state = 0
             else:
                 self.backbut.active = False
