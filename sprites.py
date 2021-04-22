@@ -189,5 +189,15 @@ class ScreenFlash(pg.sprite.Sprite):
         self.last_time = pg.time.get_ticks()
         self.game.clock.tick(60)
 
+class Flash(ScreenFlash):
+    def __init__(self,game):
+        super().__init__(game)
+        self.image = pg.image.load('Images/flash.png').convert_alpha()
 
-
+    def update(self):
+        if pg.time.get_ticks() - self.game.last_switched > 9500:
+            self.image.set_alpha(Lerp(self.image.get_alpha(),255,8 * deltaTime(self.last_time)))
+        else :
+            self.image.set_alpha(Lerp(self.image.get_alpha(),0,3 * deltaTime(self.last_time)))
+        self.last_time = pg.time.get_ticks()
+        self.game.clock.tick(60)

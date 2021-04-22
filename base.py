@@ -18,6 +18,7 @@ class Baseclass:
         '''Initialize all sprite groups'''
 
         self.all_sprites = pg.sprite.Group()
+        self.overlay = pg.sprite.Group()
         self.texts = pg.sprite.Group()
 
 
@@ -26,6 +27,8 @@ class Baseclass:
         self.screen.fill(1)
         self.all_sprites.update()
         self.all_sprites.draw(self.screen)
+        self.overlay.update()
+        self.overlay.draw(self.screen)
         pg.display.flip()
         self.clock.tick(60)
 
@@ -61,7 +64,7 @@ class Game(Baseclass):
         self.shopFlag = False
 
         self.screenflash = ScreenFlash(self)
-        self.all_sprites.add(self.screenflash)
+        self.flash = Flash(self)
         self.life = Life(self)
 
         self.waiting = False
@@ -103,6 +106,8 @@ class Game(Baseclass):
         self.next_wave_button = Text(*NEXTWAVEBUTTONPOSITION,"Start Next Wave",self,32,-1,WHITE,button=1)
         self.next_wave_button.pos = (WIDTH-self.next_wave_button.rect.width)//2 , NEXTWAVEBUTTONPOSITION[1]
         self.all_sprites.add(self.next_wave_button)
+        self.overlay.add(self.screenflash)
+        self.overlay.add(self.flash)
 
         
 
@@ -112,6 +117,7 @@ class Game(Baseclass):
         self.all_sprites = pg.sprite.Group()
         self.tiles = pg.sprite.Group()
         self.bases = pg.sprite.Group()
+        self.overlay = pg.sprite.Group()
         self.turrets = pg.sprite.Group()
         self.enemies = pg.sprite.Group()
         self.shop_sprites = pg.sprite.Group()
@@ -139,6 +145,7 @@ class Game(Baseclass):
         mouse = pg.mouse.get_pos()
         
         if self.waiting:
+            self.last_switched = pg.time.get_ticks()
             if self.next_wave_button.rect.collidepoint(mouse):
                 self.next_wave_button.active = True
             else:
