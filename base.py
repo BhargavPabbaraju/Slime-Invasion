@@ -737,12 +737,18 @@ class HowtoPlayMenu(Baseclass):
     
 
     def load_texts(self):
+        if self.page==4:
+            self.turretpage()
+            return
+        elif self.page == 5:
+            self.slimepage()
+            return
         self.nextbut = None
         self.prevbut = None
         self.texts = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
         x = 2*32
-        y = 2*32
+        y = 1*32
         for msg in TEXTDUMP[self.page]:
             txt = Text(x,y,msg,self.game,32,0,WHITE)
             self.texts.add(txt)
@@ -750,12 +756,12 @@ class HowtoPlayMenu(Baseclass):
             y+=32+16
         
         if self.page<5:
-            txt = Text(24*32,13*32,"Next".center(5),self.game,32,2,WHITE,1)
+            txt = Text(24*32,14*32,"Next".center(5),self.game,32,2,WHITE,1)
             self.texts.add(txt)
             self.all_sprites.add(txt)
             self.nextbut = txt
         if self.page>0:
-            txt = Text(3*32,13*32,"Prev".center(5),self.game,32,3,WHITE,1)
+            txt = Text(3*32,14*32,"Prev".center(5),self.game,32,3,WHITE,1)
             self.texts.add(txt)
             self.all_sprites.add(txt)
             self.prevbut = txt
@@ -785,6 +791,7 @@ class HowtoPlayMenu(Baseclass):
             if self.prevbut.rect.collidepoint(mouse):
                 self.prevbut.active = True
                 if clicked:
+                    
                     self.page-=1
                     self.load_texts()
                     pg.time.wait(200)
