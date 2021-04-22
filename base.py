@@ -375,12 +375,12 @@ class MainMenu(Baseclass):
         self.all_sprites.add(txt)
 
         txt = Text(391,174+80,txts[1],self.game,44,3,BLACK,3)
-        txt.pos = (WIDTH-txt.rect.width)//2 , 174+80
+        txt.pos = (WIDTH-txt.rect.width)//2 , 174+100
         self.texts.add(txt)
         self.all_sprites.add(txt)
 
         txt = Text(391,174+160,txts[2],self.game,44,4,BLACK,3)
-        txt.pos = (WIDTH-txt.rect.width)//2 , 174+160
+        txt.pos = (WIDTH-txt.rect.width)//2 , 174+200
         self.texts.add(txt)
         self.all_sprites.add(txt)
 
@@ -574,7 +574,9 @@ class MapMenu(Baseclass):
         self.game = game
         self.menu = menu
 
-        
+        self.bg = Bgsprite(self.game,"cave")
+        self.all_sprites.add(self.bg)
+
 
         self.mapimgs = []
         for i in range(1,4):
@@ -774,6 +776,8 @@ class HowtoPlayMenu(Baseclass):
 
         self.page = 0
 
+        self.bg = Bgsprite(self.game,"cave")
+
         self.flash = Flash(self.game)
         self.load_texts()
 
@@ -830,6 +834,7 @@ class HowtoPlayMenu(Baseclass):
         self.backbut = None
         self.texts = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
+        self.all_sprites.add(self.bg)
         
         x = 2*32
         y = 1*32
@@ -858,6 +863,7 @@ class HowtoPlayMenu(Baseclass):
         
 
         self.all_sprites.add(self.flash)
+        
             
 
 

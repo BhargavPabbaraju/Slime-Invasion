@@ -240,6 +240,7 @@ class MenuSprite(pg.sprite.Sprite):
             self.damage = str(SLIMEHEALTHS[i])
 
             self.image = pg.Surface((32,32))
+            self.image.set_colorkey((0,0,0))
             self.sheet = pg.image.load('Images/slime%d.png'%i).convert_alpha()
             self.image.blit(self.sheet,(0,0),[0,0,32,32])
 

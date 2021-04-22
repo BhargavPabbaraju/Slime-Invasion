@@ -26,7 +26,7 @@ class Bgsprite(pg.sprite.Sprite):
 
         self.limit = 10
 
-        if not self.type in ["bg","bg1","title"]:
+        if not self.type in ["bg","bg1","title","cave"]:
             self.origin = 15 * self.dir
             self.rect.x = 15 * self.dir
 
@@ -34,7 +34,7 @@ class Bgsprite(pg.sprite.Sprite):
         
 
     def update(self):
-        if self.type in ["bg","bg1","title"]:
+        if self.type in ["bg","bg1","title","cave"]:
             return
 
         now = pg.time.get_ticks()
