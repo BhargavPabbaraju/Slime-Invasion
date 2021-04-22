@@ -49,7 +49,12 @@ class Text(pg.sprite.Sprite):
         if self.button:
             but = pg.transform.scale(self.sheet,(self.rect.width+self.size+len(self.msg)*3,self.rect.height+self.size+4))
             butrect = but.get_rect()
-            self.rect.center = butrect.center
+            self.rect.center = butrect.center 
+            if self.button==3:
+                self.rect.y = butrect.height - self.size - self.size//2 +6
+                if self.ind==0:
+                    self.rect.y +=10
+
             but.blit(self.image,self.rect)
             self.image = but
             self.rect = self.image.get_rect()

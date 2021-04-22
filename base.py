@@ -338,49 +338,53 @@ class MainMenu(Baseclass):
 
         txts = ["Play".center(10),"How to Play","Quit".center(10)]
 
-        self.generate_sprites()
+       
         
 
-        txt = Text(*GAMEOVERTEXTPOSITIONS[0],TITLE,self.game,72,1,WHITE,2)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[0][1]+2*32
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
+       
+
         mx.music.unload()
         mx.music.load(music['MainMenu'])
         mx.music.play(-1)
 
-        txt = Text(*GAMEOVERTEXTPOSITIONS[0],txts[0],self.game,32,0,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 , GAMEOVERTEXTPOSITIONS[3][1]
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
-
-        
-
-        txt = Text(*GAMEOVERTEXTPOSITIONS[3],txts[3-2],self.game,32,3,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 -300, GAMEOVERTEXTPOSITIONS[3][1]
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
-        txt = Text(*GAMEOVERTEXTPOSITIONS[4],txts[4-2],self.game,32,4,WHITE,1)
-        txt.pos = (WIDTH-txt.rect.width)//2 +300, GAMEOVERTEXTPOSITIONS[4][1]
-        self.texts.add(txt)
-        self.all_sprites.add(txt)
+       
 
 
         self.menu = menu
         
         
+        self.bgsprites = pg.sprite.Group()
+        for typ in BGTYPES:
+            bgs = Bgsprite(self,typ)
+            self.bgsprites.add(bgs)
+            self.all_sprites.add(bgs)
+        
+
+        txt = Text(0*32,0*32,TITLE.center(22),self.game,72,0,GOLD,3)
+        txt.pos = (WIDTH-txt.rect.width)//2 , 0*32
+        self.all_sprites.add(txt)
+
+
+        txt = Text(391,174,txts[0],self.game,44,1,BLACK,3)
+        txt.pos = (WIDTH-txt.rect.width)//2 , 174
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+        txt = Text(391,174+80,txts[1],self.game,44,3,BLACK,3)
+        txt.pos = (WIDTH-txt.rect.width)//2 , 174+80
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
+        txt = Text(391,174+160,txts[2],self.game,44,4,BLACK,3)
+        txt.pos = (WIDTH-txt.rect.width)//2 , 174+160
+        self.texts.add(txt)
+        self.all_sprites.add(txt)
+
         self.screen = disp
 
         
     
-    def generate_sprites(self):
-        for i in range(30):
-            typ = rd.choice([0,1,2,3,4,5])
-            x=rd.randint(1,29)*32
-            y = rd.randint(1,14)*32
-            sli =ENEMYCLASSES[typ](x,y,self.game,0)
-            sli.menu_slime = True
-            self.all_sprites.add(sli)
+   
 
 
     
@@ -392,13 +396,13 @@ class MainMenu(Baseclass):
         mouse = pg.mouse.get_pos()
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
-                if txt.button==1:
+                if txt.button>1:
                     if txt.active == False:
                         sounds['Hover'].play()
                     txt.active = True
                 if clicked:
                     sounds['Click'].play()
-                    if txt.ind == 0: #New Game
+                    if txt.ind == 1: #New Game
                         self.menu.game_state = 4
                         self.menu.mapmenu = MapMenu(self.game,self.menu)
                     
@@ -558,6 +562,8 @@ class MapMenu(Baseclass):
         self.game = game
         self.menu = menu
 
+        
+
         self.mapimgs = []
         for i in range(1,4):
             self.mapimgs.append(pg.image.load('Images/map%d.png'%i).convert())
@@ -589,7 +595,15 @@ class MapMenu(Baseclass):
         
         
         self.screen = disp
-    
+
+    def generate_sprites(self):
+        for i in range(30):
+            typ = rd.choice([0,1,2,3,4,5])
+            x=rd.randint(1,29)*32
+            y = rd.randint(1,14)*32
+            sli =ENEMYCLASSES[typ](x,y,self.game,0)
+            sli.menu_slime = True
+            self.all_sprites.add(sli)
 
     def draw(self):
         
@@ -624,11 +638,10 @@ class MapMenu(Baseclass):
                 txt.active = False
         
 
-        for i in range(2):
+        for i in range(3):
             if self.mapimgs[i].rect.collidepoint(mouse):
                 self.mapimgs[i].image.set_alpha(100)
-                clicks = pg.mouse.get_pressed()
-                if clicks[0]:
+                if clicked:
                     self.menu.game = Game(self.menu,mapid=i+1)
                     self.menu.game_state = 1
 
@@ -690,6 +703,7 @@ class Main(Baseclass):
                         self.mainmenu.events(clicked=True)
                     elif self.game_state == 4:
                         self.mapmenu.events(clicked=True)
+                   
 
 
             if self.game_state == 0:
@@ -737,14 +751,22 @@ class HowtoPlayMenu(Baseclass):
         self.screen = disp
 
     
-    def turretpage(self):
+    def turretpage(self,isslime=False):
+
         n = len(TURRETCLASSES)
+
+        if isslime:
+            n = 6
+            txt = Text(18*32,14*32,"Back To Main Menu".center(5),self.game,32,2,WHITE,1)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+            self.backbut = txt
         
         
-        y=5*32
+        y=4*32
         for i in range(n):
             x=3*32
-            ms = MenuSprite(i,x,y,self.game,False)
+            ms = MenuSprite(i,x,y,self.game,isslime)
             self.all_sprites.add(ms)
             x+=3*32
             txt = Text(x,y,ms.name,self.game,32,0,WHITE)
@@ -770,6 +792,7 @@ class HowtoPlayMenu(Baseclass):
         
         self.nextbut = None
         self.prevbut = None
+        self.backbut = None
         self.texts = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
         
@@ -796,7 +819,7 @@ class HowtoPlayMenu(Baseclass):
             self.turretpage()
             
         elif self.page == 5:
-            self.slimepage()
+            self.turretpage(True)
             
 
 
@@ -817,6 +840,7 @@ class HowtoPlayMenu(Baseclass):
                     self.page+=1
                     self.load_texts()
                     pg.time.wait(200)
+                    return
             else:
                 self.nextbut.active = False
         
@@ -828,8 +852,18 @@ class HowtoPlayMenu(Baseclass):
                     self.page-=1
                     self.load_texts()
                     pg.time.wait(200)
+                    
             else:
                 self.prevbut.active = False
+        
+        if self.page==5 and self.backbut:
+            if self.backbut.rect.collidepoint(mouse):
+                self.backbut.active = True
+                if clicked:
+                    pg.time.wait(200)
+                    self.menu.game_state = 0
+            else:
+                self.backbut.active = False
 
         
 

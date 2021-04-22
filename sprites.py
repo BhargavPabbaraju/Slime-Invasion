@@ -5,6 +5,7 @@ from utility import *
 from settings import *
 from life import *
 from text import *
+from background import *
 
 
 class Tile(pg.sprite.Sprite):
@@ -231,7 +232,17 @@ class MenuSprite(pg.sprite.Sprite):
             self.name = TURRETNAMES[i]
             self.cost = str(TURRETCOSTS[i])
         
-        self.image = TURRETIMAGES[i]
+            self.image = TURRETIMAGES[i]
+
+        else:
+            self.cost = str(SLIMESPEEDS[i])
+            self.name = SLIMECOLORS[i]
+            self.damage = str(SLIMEHEALTHS[i])
+
+            self.image = pg.Surface((32,32))
+            self.sheet = pg.image.load('Images/slime%d.png'%i).convert_alpha()
+            self.image.blit(self.sheet,(0,0),[0,0,32,32])
+
         self.rect = self.image.get_rect()
         self.rect.topleft = self.pos
 
