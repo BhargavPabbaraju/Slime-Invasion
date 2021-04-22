@@ -360,8 +360,10 @@ class MainMenu(Baseclass):
             self.all_sprites.add(bgs)
         
 
-        txt = Text(0*32,0*32,TITLE.center(22),self.game,72,0,GOLD,3)
-        txt.pos = (WIDTH-txt.rect.width)//2 , 0*32
+        txt = Bgsprite(self,"title")
+        txt.rect.topleft = (WIDTH-txt.rect.width)//2 , 0*32
+        self.all_sprites.add(txt)
+
         self.all_sprites.add(txt)
 
 

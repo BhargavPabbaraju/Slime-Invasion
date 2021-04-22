@@ -10,7 +10,7 @@
 ----<DONE>----9) Enemy Waves and Score
 ----<DONE>----10) Basic Map
 ----<HALF DONE>----11) Main and Pause Menus
-----<IN PROGRESS>----12) Tutorial 
+----<DONE>----12) Tutorial 
 ----<DONE>----13) Sounds
 14) Polish
 ----<DONE>----15) Maps

@@ -15,6 +15,7 @@ TITLE = "Slimes Invasion"
 
 disp = pg.display.set_mode((WIDTH,HEIGHT))
 pg.display.set_caption(TITLE)
+pg.display.set_icon(pg.image.load('Images/icon.png'))
 pg.init()
 mx.pre_init(44100,-16,2,512)
 mx.set_num_channels(16)
@@ -54,7 +55,7 @@ YELLOWSLIMEHEALTH = 50
 TEALSLIMEHEALTH = 35
 
 
-BGTYPES = ["bg1","bushleft","bushright","slimeblue","slimegreen","treeleft","treeright"]
+BGTYPES = ["bg1","slimegreen","bushleft","bushright","slimeblue","treeleft","treeright"]
 
 
 
