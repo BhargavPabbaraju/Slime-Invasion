@@ -736,33 +736,40 @@ class HowtoPlayMenu(Baseclass):
     
     def turretpage(self):
         n = len(TURRETCLASSES)
-        info = {
-            'damage':[],
-            'name':[],
-            'image':[]
-        }
+        
+        
+        y=5*32
         for i in range(n):
+            x=3*32
             ms = MenuSprite(i,x,y,self.game,False)
-            cl = TURRETCLASSES[i]
-            info['damage'].append(cl.damage)
-            info['name'].append(cl.name)
-            info['image'].append(TURRETIMAGES[i])
+            self.all_sprites.add(ms)
+            x+=3*32
+            txt = Text(x,y,ms.name,self.game,32,0,WHITE)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+            x+=8*32
+            txt = Text(x,y,ms.damage,self.game,32,0,WHITE)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+            x+=6*32
+            txt = Text(x,y,ms.cost,self.game,32,0,WHITE)
+            self.texts.add(txt)
+            self.all_sprites.add(txt)
+
+            y+=32+16
+            
 
 
 
     
 
     def load_texts(self):
-        if self.page==4:
-            self.turretpage()
-            return
-        elif self.page == 5:
-            self.slimepage()
-            return
+        
         self.nextbut = None
         self.prevbut = None
         self.texts = pg.sprite.Group()
         self.all_sprites = pg.sprite.Group()
+        
         x = 2*32
         y = 1*32
         for msg in TEXTDUMP[self.page]:
@@ -781,6 +788,13 @@ class HowtoPlayMenu(Baseclass):
             self.texts.add(txt)
             self.all_sprites.add(txt)
             self.prevbut = txt
+        
+        if self.page==4:
+            self.turretpage()
+            
+        elif self.page == 5:
+            self.slimepage()
+            
 
 
     def draw(self):

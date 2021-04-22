@@ -34,6 +34,8 @@ music = {
     'MainMenu' : 'Sounds/MainMenu.wav'
 }
 
+TURRETDAMAGES=[3,9,35]
+TURRETNAMES=["Crossbow","Triple Crossbow","Cannon"]
 CROSSBOWDAMAGE = 3
 CANNONDAMAGE = 35
 TRIPLECROSSBOWDAMAGE = 9

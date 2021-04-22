@@ -218,14 +218,22 @@ class MenuSprite(pg.sprite.Sprite):
         super().__init__()
 
         self.ind =ind
-        self.name = name
+        
         self.pos = x,y
         self.isslime = isslime
 
         self.game = game 
 
+        i=self.ind
         if not self.isslime:
-            pass
+
+            self.damage = str(TURRETDAMAGES[i])
+            self.name = TURRETNAMES[i]
+            self.cost = str(TURRETCOSTS[i])
+        
+        self.image = TURRETIMAGES[i]
+        self.rect = self.image.get_rect()
+        self.rect.topleft = self.pos
 
         
 

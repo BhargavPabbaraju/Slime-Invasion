@@ -41,11 +41,11 @@ TEXTDUMP = {
     ],
 
     #Page 4 Turret info
-    4 : ["Turret Type\t Damage\t Cost"
+    4 : ["\t\t\t\t\t\t\tTurret Type\t\t\t\t\tDamage\t\t\t\t\t\t\t\tCost"
     ],
 
     #Page 5 Slime info
-    5 : ["Slime Type\t Health\t Speed"
+    5 : ["\t\t\t\t\t\t\tSlime Color\t\t\t\t\tHealth\t\t\t\t\t\t\t\tSpeed"
          
     ],
 
