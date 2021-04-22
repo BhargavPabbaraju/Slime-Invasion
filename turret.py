@@ -51,7 +51,7 @@ class Turret(pg.sprite.Sprite):
         self.active = False
 
     def update(self):
-        self.ammobar.set_ammo(int(self.ammo))
+        self.ammobar.set_ammo(int(self.ammo),not self.usedSuper or self.super)
         if self.super:
             self.ammo -= (self.max_ammo/10) * deltaTime(self.last_time)
             if self.ammo <= 0:
@@ -95,6 +95,7 @@ class Turret(pg.sprite.Sprite):
     def refreshAmmo(self):
         self.ammo = self.max_ammo
         self.usedSuper = False
+        self.super = False
 
     def toggleSuper(self):
         if self.super == True:
@@ -217,22 +218,27 @@ class Base(pg.sprite.Sprite):
 class AmmoBar(pg.sprite.Sprite):
     def __init__(self,maxammo,game,x,y):
         super().__init__()
+        self.state = 1
         self.maxammo = maxammo
         self.ammo = maxammo
-        self.imagesource = pg.image.load('Images/redsquare.png').convert()
-        self.image = pg.transform.scale(self.imagesource,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
+        self.imagegreen = pg.image.load('Images/greensquare.png').convert()
+        self.imagered = pg.image.load('Images/redsquare.png').convert()
+        self.image = pg.transform.scale(self.imagegreen,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
         self.rect = self.image.get_rect()
         self.rect.x = x
         self.rect.y = y
 
-    def set_ammo(self,ammo):
+    def set_ammo(self,ammo,state):
         self.ammo = ammo
+        self.state = state
 
     def update(self):
         if self.ammo<0:
             self.ammo = 0
-        self.image = pg.transform.scale(self.imagesource,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
-        self.image = pg.transform.scale(self.imagesource,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
+        if self.state == 1:
+            self.image = pg.transform.scale(self.imagegreen,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
+        else :
+            self.image = pg.transform.scale(self.imagered,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
 
 class CrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):

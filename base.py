@@ -66,7 +66,7 @@ class Game(Baseclass):
 
         self.waiting = False
 
-        self.coins = 30
+        self.coins = 10
         self.shop = ShopUI(self)
         
 
