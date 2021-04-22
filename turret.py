@@ -30,7 +30,7 @@ class Turret(pg.sprite.Sprite):
         self.animation_framerate = 52
         self.rect.center = self.base.rect.center
         self.shot = False
-        self.max_ammo = 25
+        self.max_ammo = 40
         self.shootSound = sounds['CrossbowShoot']
         self.ammo = self.max_ammo
         self.ammobar = AmmoBar(self.ammo,self.game,self.rect.x,self.rect.y)
@@ -53,7 +53,9 @@ class Turret(pg.sprite.Sprite):
         
 
     def update(self):
-        self.ammobar.set_ammo(int(self.ammo),not self.usedSuper or self.super)
+        self.ammobar.set_ammo(int(self.ammo),not self.usedSuper)
+        if self.super:
+            self.ammobar.set_ammo(int(self.ammo),-1)
         if self.super:
             self.ammo -= (self.max_ammo/10) * deltaTime(self.last_time)
             if self.ammo <= 0:
@@ -225,6 +227,7 @@ class AmmoBar(pg.sprite.Sprite):
         self.ammo = maxammo
         self.imagegreen = pg.image.load('Images/greensquare.png').convert()
         self.imagered = pg.image.load('Images/redsquare.png').convert()
+        self.imageorg = pg.image.load('Images/orangesquare.png').convert()
         self.image = pg.transform.scale(self.imagegreen,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
         self.rect = self.image.get_rect()
         self.rect.x = x
@@ -239,8 +242,10 @@ class AmmoBar(pg.sprite.Sprite):
             self.ammo = 0
         if self.state == 1:
             self.image = pg.transform.scale(self.imagegreen,(abs(int((self.ammo/self.maxammo) * AMMOBARWIDTH)),5))
-        else :
+        elif self.state == 0 :
             self.image = pg.transform.scale(self.imagered,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
+        else :
+            self.image = pg.transform.scale(self.imageorg,(int((self.ammo/self.maxammo) * AMMOBARWIDTH),5))
 
 class CrossbowTurret(Turret):
     def __init__(self,type,r,c,game,base):
@@ -293,7 +298,7 @@ class CannonTurret(Turret):
         self.animation_framerate = 10
         self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1)
         self.shootSound = sounds['CannonShoot']
-        self.max_ammo = 20
+        self.max_ammo = 30
         self.ammo = self.max_ammo
         self.shootmax = 3
         self.shootmin = 1
