@@ -496,8 +496,10 @@ class PauseMenu(Baseclass):
                         self.flash.flash()
 
                     elif txt.ind == 4: #QUIT:
-
                         self.menu.game_state = 0
+                        mx.music.unload()
+                        mx.music.load(music['MainMenu'])
+                        mx.music.play(-1)
                         self.flash.flash()
             else:
                 txt.active = False

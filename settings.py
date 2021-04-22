@@ -37,6 +37,9 @@ music = {
     'MainMenu' : 'Sounds/MainMenu.wav'
 }
 
+sounds['Click'].set_volume(0.3)
+sounds['Hover'].set_volume(0.3)
+
 TURRETDAMAGES=[3,9,35,5]
 TURRETNAMES=["Crossbow","Triple Crossbow","Cannon","Scatter Shot"]
 CROSSBOWDAMAGE = 3
