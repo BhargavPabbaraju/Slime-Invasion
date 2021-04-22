@@ -393,8 +393,11 @@ class MainMenu(Baseclass):
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
                 if txt.button==1:
+                    if txt.active == False:
+                        sounds['Hover'].play()
                     txt.active = True
                 if clicked:
+                    sounds['Click'].play()
                     if txt.ind == 0: #New Game
                         self.menu.game_state = 4
                         self.menu.mapmenu = MapMenu(self.game,self.menu)

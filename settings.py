@@ -26,6 +26,8 @@ sounds = {
     'TripleCrossbowShoot' : mx.Sound('Sounds/triplecrossbowsound.wav'),
     'CannonShoot' : mx.Sound('Sounds/cannonsound.wav'),
     'GameOver' : mx.Sound('Sounds/GameOver.wav'),
+    'Click' : mx.Sound('Sounds/click.wav'),
+    'Hover' : mx.Sound('Sounds/hover.wav'),
     'WaveStart' : mx.Sound('Sounds/WaveStart.wav')
 }
 music = {
