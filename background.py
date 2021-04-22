@@ -1,4 +1,5 @@
 from settings import *
+from utility import *
 from text import *
 
 
@@ -12,44 +13,39 @@ class Bgsprite(pg.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.rect.topleft = x,y
         self.offset = 0
+        self.speed = 0.25
         self.dir = 0
+        self.speed_thres = 1
         if self.type in ["bushleft","treeleft","slimeblue"]:
-            self.dir = 0
+            self.dir = -1
         else:
             self.dir = 1
         
         self.last_update = pg.time.get_ticks() + rd.randint(100,200)
-        self.update_thres = 200
+        self.update_thres = 50
+        self.pos_offset = 0 -self.offset
 
         self.limit = 10
 
     def update(self):
-        return
         if self.type in ["bg","bg1","title"]:
             return
 
         now = pg.time.get_ticks()
         
-        
-        
-        if now - self.last_update > self.update_thres:
-            if self.offset >= self.limit:
-                self.dir = 0 if self.dir==1 else 1
-            elif self.offset<=0:
-                self.dir = 0 if self.dir==1 else 1
+        self.pos_offset = 0 - self.rect.x
 
-            if self.dir==0:
-                self.offset+=1
-            
-        
-            else:
-                self.offset-=1
+        if now - self.last_update >= self.update_thres:
+            self.offset += self.speed
+            if abs(self.offset) > self.speed_thres:
+                if self.offset < 0:
+                    self.offset = -self.speed_thres
+                else :
+                    self.offset = self.speed_thres
+            if abs(self.pos_offset) > self.limit:
+                self.dir = -self.dir
+                self.rect.x += self.speed_thres * self.dir
+                self.offset = 0
+            self.rect.x += self.offset* self.dir
 
-            #print(self.type,self.offset)
-            self.rect.x+=self.offset
-            self.last_update=now
-        
-        
-        
-        
-
+            self.last_update = now
