@@ -378,16 +378,13 @@ class MainMenu(Baseclass):
  
         
     
-    def events(self):
-        #self.update()
+    def events(self,clicked=False):
         mouse = pg.mouse.get_pos()
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
                 if txt.button==1:
                     txt.active = True
-                clicks = pg.mouse.get_pressed()
-                if clicks[0]:
-                    
+                if clicked:
                     if txt.ind == 0: #New Game
                         self.menu.game_state = 4
                         self.menu.mapmenu = MapMenu(self.game,self.menu)
@@ -589,14 +586,13 @@ class MapMenu(Baseclass):
         pg.display.flip()
         self.clock.tick(60)
 
-    def events(self):
+    def events(self,clicked=False):
         mouse = pg.mouse.get_pos()
         for txt in self.texts:
             if txt.rect.collidepoint(mouse):
                 if txt.button==1:
                     txt.active = True
-                clicks = pg.mouse.get_pressed()
-                if clicks[0]:
+                if clicked:
                     
                     if txt.ind == 1: #Map 1
                         self.menu.game = Game(self.menu,mapid=1)
@@ -673,8 +669,14 @@ class Main(Baseclass):
                     if self.game_state ==1:
                         self.game.mouseevents(event.button,event.type)
                     
-                    elif self.game_state == 5:
+                
+                if event.type == pg.MOUSEBUTTONDOWN:
+                    if self.game_state == 5:
                         self.htpmenu.events(clicked=True)
+                    elif self.game_state == 0:
+                        self.mainmenu.events(clicked=True)
+                    elif self.game_state == 4:
+                        self.mapmenu.events(clicked=True)
 
 
             if self.game_state == 0:
@@ -735,7 +737,7 @@ class HowtoPlayMenu(Baseclass):
             txt = Text(x,y,msg,self.game,32,0,WHITE)
             self.texts.add(txt)
             self.all_sprites.add(txt)
-            y+=32+6
+            y+=32+16
         
         if self.page<5:
             txt = Text(24*32,13*32,"Next".center(5),self.game,32,2,WHITE,1)

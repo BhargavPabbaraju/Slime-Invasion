@@ -12,9 +12,11 @@ TEXTDUMP = {
     #Page 1 What to do 
     1 : ["Buy and place turrets on the bases.",
          "You can control only one turret at a time.",
-         "Keep clicking on the turret (left click) to shoot.",
-         "The turret looses its ammo while shooting and the ammo recovers over time.",
-         "Once per wave , you can activate the  skill for each turret by right clicking on it when its ammo is full."
+         "Keep clicking on the turret [ left click ] to shoot.",
+         "The turret looses its ammo while shooting and the ",
+         "ammo recovers over time.",
+         "Once per wave , you can activate the  skill for each",
+         "turret by right clicking on it when its ammo is full."
         ] ,
 
     #Page 2 Controls
