@@ -279,8 +279,9 @@ class Game(Baseclass):
                             self.all_sprites.add(base.turret.ammobar)
 
         elif action == pg.MOUSEBUTTONDOWN and button == 3:
-            if self.current_turret.ammo == self.current_turret.max_ammo:
+            if not self.current_turret.usedSuper:
                 self.current_turret.toggleSuper()
+                self.current_turret.ammo = self.current_turret.max_ammo
 
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
@@ -496,8 +497,10 @@ class PauseMenu(Baseclass):
                         self.flash.flash()
 
                     elif txt.ind == 4: #QUIT:
-
                         self.menu.game_state = 0
+                        mx.music.unload()
+                        mx.music.load(music['MainMenu'])
+                        mx.music.play(-1)
                         self.flash.flash()
             else:
                 txt.active = False
