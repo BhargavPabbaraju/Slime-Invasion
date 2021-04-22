@@ -10,20 +10,22 @@ TEXTDUMP = {
     "Your task is to kill all the slimes and save humanity."]  ,
 
     #Page 1 What to do 
-    1 : ["Buy and place turrets on the bases.",
+    1 : ["Buy and place turrets on the platforms.",
          "You can control only one turret at a time.",
-         "Keep clicking on the turret (left click) to shoot.",
+         "Hold Left Click to shoot.",
          "The turret looses its ammo while shooting and the ammo recovers over time.",
-         "Once per wave , you can activate the  skill for each turret by right clicking on it when its ammo is full."
+         "Ammo will recover 4x faster if a turret is inactive",
+         "Once per wave , you can activate the  skill for each turret by right clicking on it when its ammo is full.",
+         "A turret skill will last for 10 seconds and will drain all ammo over the 10 seconds"
         ] ,
 
     #Page 2 Controls
-    2 : ["Left click to select turrets and bases.",
+    2 : ["Left click on base to place selected turret.",
          "Left click to shoot.",
          "Tab to switch to next turret.",
          "Left click to select specific turret.",
          "Right click turret to activate skill.(When its ammo is full)",
-         "Spacebar to Pause the game.",
+         "Spacebar to Pause the game."
     ],
 
     #Page 3 Wave and Life info
@@ -31,7 +33,7 @@ TEXTDUMP = {
          "The shop is accessible in between waves.",
          "Kill all slimes in the wave to clear it.",
          "If you fail to kill a slime before it escapes , you will lose a life. ",
-         "When you run out of all three lives, the game is over.",
+         "When you run out of all three lives, the game is over."
     ],
 
     #Page 4 Turret info
