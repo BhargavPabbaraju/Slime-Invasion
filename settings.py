@@ -11,7 +11,7 @@ from pygame.math import Vector2 as vec
 WIDTH = 960
 HEIGHT = 544
 
-TITLE = "Slimes Invasion"
+TITLE = "Slime Invasion"
 
 disp = pg.display.set_mode((WIDTH,HEIGHT))
 pg.display.set_caption(TITLE)
@@ -37,11 +37,12 @@ music = {
     'MainMenu' : 'Sounds/MainMenu.wav'
 }
 
-TURRETDAMAGES=[3,9,35]
-TURRETNAMES=["Crossbow","Triple Crossbow","Cannon"]
+TURRETDAMAGES=[3,9,35,5]
+TURRETNAMES=["Crossbow","Triple Crossbow","Cannon","Scatter Shot"]
 CROSSBOWDAMAGE = 3
 CANNONDAMAGE = 35
 TRIPLECROSSBOWDAMAGE = 9
+SCATTERSHOTDAMAGE = 5
 AMMOBARWIDTH = 50
 
 SLIMEHEALTHS = [15,25,40,15,50,35]

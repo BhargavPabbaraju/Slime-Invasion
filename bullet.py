@@ -62,3 +62,12 @@ class Cannonball(Bullet):
         self.speed = 30
         self.formVel()
         self.damage = CANNONDAMAGE
+
+class Shot(Bullet):
+    def __init__(self,x,y,angle,spread):
+        super().__init__(x,y,angle,spread)
+        self.image = pg.transform.scale(pg.image.load('Images/shot.png'),(6,6))
+        self.setImage()
+        self.speed = 15
+        self.formVel()
+        self.damage = SCATTERSHOTDAMAGE

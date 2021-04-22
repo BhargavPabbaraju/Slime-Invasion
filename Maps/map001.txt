@@ -35,7 +35,8 @@ g g g g g g g g g g g g g 0 0 0 0 d d g g g g g g g g g g g
 0 362
 561 512
 #TURRET TYPES
-3
+4
 0
 1
 2
+3

@@ -331,22 +331,64 @@ class CannonTurret(Turret):
         self.game.bullets.add(self.ball)
         self.ball.rect.center = self.rect.center
 
+class ScatterShot(Turret):
+    def __init__(self,type,r,c,game,base):
+        super().__init__(type,r,c,game,base)
+        self.sheet = Spritesheet('Images/ScatterShotSheet.png')
+        self.animation_framerate = 45
+        self.animation_database = self.sheet.load_animation(48,32,(0,0,0),1.75)
+        self.shootSound = sounds['CannonShoot']
+        self.max_ammo = 80
+        self.ammo = self.max_ammo
+        self.shootmax = 2
+        self.shootmin = 1
+        self.damage = SCATTERSHOTDAMAGE
+        self.ammobar.maxammo = self.max_ammo
+        self.recovery = 6
+        self.spread = 45
+
+        self.name = "ScatterShot"
+    
+    def toggleSuper(self):
+        if self.super == True:
+            self.infiniteAmmo = False
+            self.super = False
+        elif self.super == False:
+            self.infiniteAmmo = True
+            self.super = True
+
+    def shoot(self):
+        self.shot = True
+        if not self.infiniteAmmo:
+            self.ammo -= 8
+        self.shootSound.play()
+        for x in range(8):
+            self.shot = Shot(self.rect.center[0],self.rect.center[1],self.angle - 180 + self.spread*x,7)
+            self.game.all_sprites.remove(self)
+            self.game.all_sprites.add(self.shot)
+            self.game.all_sprites.add(self)
+            self.game.bullets.add(self.shot)
+            self.shot.rect.center = self.rect.center
+
 
 TURRETCLASSES = {
     0 : CrossbowTurret,
     1 : TripleCrossbowTurret,
-    2 : CannonTurret
+    2 : CannonTurret,
+    3 : ScatterShot
 }
 
 TURRETIMAGES = {
     0 : pg.image.load('Images/CrossbowIcon.png').convert_alpha(),
     1 : pg.image.load('Images/TripleCrossbowIcon.png').convert_alpha(),
-    2 : pg.image.load('Images/CannonIcon.png').convert_alpha()
+    2 : pg.image.load('Images/CannonIcon.png').convert_alpha(),
+    3 : pg.image.load('Images/ScatterShotIcon.png').convert_alpha()
 }
 
 TURRETCOSTS = {
     0 : 10,
     1 : 15,
-    2 : 20
+    2 : 20,
+    3 : 20
 }
 
