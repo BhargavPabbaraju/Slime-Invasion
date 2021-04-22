@@ -279,8 +279,9 @@ class Game(Baseclass):
                             self.all_sprites.add(base.turret.ammobar)
 
         elif action == pg.MOUSEBUTTONDOWN and button == 3:
-            if self.current_turret.ammo == self.current_turret.max_ammo:
+            if not self.current_turret.usedSuper:
                 self.current_turret.toggleSuper()
+                self.current_turret.ammo = self.current_turret.max_ammo
 
         elif action == pg.MOUSEBUTTONUP and button == 1:
             self.current_turret.toggle_shoot(False)
